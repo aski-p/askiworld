@@ -2,8 +2,7 @@
 builder = "dockerfile"
 
 [deploy]
-startCommand = "catalina.sh run"
-healthcheckPath = "/"
-healthcheckTimeout = 100
+healthcheckPath = "/healthz"
+healthcheckTimeout = 30
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3

@@ -1,0 +1,14 @@
+{
+  "name": "askiworld",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ASKIWORLD cartoon village portal hub",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node --check server.mjs && node --check scene-part-1.js && node --check scene-part-2.js && node --check scene-part-3.js && node --check scene-part-4.js && node --check scene-part-5.js && node --check scene.js && node --check app.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#162d3d" />
+  <meta name="description" content="페이지들이 살아 있는 카툰 마을, ASKIWORLD의 첫 번째 포털입니다." />
+  <meta property="og:title" content="ASKIWORLD — 시작의 마을" />
+  <meta property="og:description" content="캐릭터와 함께 마을의 건물 문을 열고 새로운 페이지로 이동하세요." />
+  <meta property="og:type" content="website" />
+  <title>ASKIWORLD — 시작의 마을</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <noscript>
+    <div class="noscript">ASKIWORLD를 이용하려면 JavaScript를 켜 주세요. <a href="https://agent-office.askipgh.chatgpt.site/">Agent Office 바로가기</a></div>
+  </noscript>
+  <main class="app" id="app" aria-label="ASKIWORLD 카툰 마을 포털" aria-busy="false">
+    <div class="world" id="world">
+      <svg class="scene" id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="카툰 렌더링 풍의 ASKIWORLD 마을과 Agent Office 건물"></svg>
+    </div>
+
+    <header class="topbar">
+      <div class="brand" aria-label="ASKIWORLD 로고">
+        <div class="brand-mark">A</div>
+        <div class="brand-copy">
+          <div class="brand-title">ASKIWORLD</div>
+          <div class="brand-sub">A WORLD OF LIVING PAGES</div>
+        </div>
+      </div>
+      <div class="world-meta" aria-label="현재 월드 상태">
+        <div class="world-chip">WORLD 01 · 시작의 마을</div>
+        <div class="portal-count">1 / 4 PORTALS OPEN</div>
+      </div>
+    </header>
+
+    <section class="info-card" id="infoCard" aria-labelledby="portalTitle">
+      <div class="eyebrow">Portal Online <span class="portal-index">01</span></div>
+      <h1 class="card-title" id="portalTitle">Agent Office</h1>
+      <p class="card-desc" id="portalDescription">ASKIWORLD의 첫 번째 건물입니다. 캐릭터가 길을 따라 문 앞까지 이동하고, 문이 열리면 실제 Agent Office 페이지로 들어갑니다.</p>
+      <p class="portal-url" aria-label="연결 주소">agent-office.askipgh.chatgpt.site</p>
+      <div class="actions">
+        <button class="primary" id="enterButton" type="button" aria-describedby="portalDescription">문 열고 들어가기 →</button>
+        <button class="secondary" id="previewButton" type="button">연출만 보기</button>
+      </div>
+    </section>
+
+    <div class="hint"><span class="mouse-icon"></span><span>건물이나 버튼을<br>클릭해 보세요</span></div>
+    <div class="transition-shutter" id="shutter"></div>
+    <div class="enter-label" id="enterLabel"><strong>Agent Office</strong><span>PORTAL CONNECTING…</span></div>
+    <div class="toast" id="toast" role="status" aria-live="polite">연출 미리보기 완료 · 실제 이동은 하지 않았어요.</div>
+    <div class="visually-hidden" id="liveStatus" aria-live="polite"></div>
+  </main>
+
+  <script src="./scene-part-1.js" defer></script>
+  <script src="./scene-part-2.js" defer></script>
+  <script src="./scene-part-3.js" defer></script>
+  <script src="./scene-part-4.js" defer></script>
+  <script src="./scene-part-5.js" defer></script>
+  <script src="./scene.js" defer></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>
