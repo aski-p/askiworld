@@ -1,85 +1,101 @@
-import http from 'node:http';
-import { readFile, stat } from 'node:fs/promises';
-import { extname, join, normalize, relative, resolve, sep } from 'node:path';
+import { createReadStream, promises as fs } from 'node:fs';
+import { createServer } from 'node:http';
+import { extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = resolve(fileURLToPath(new URL('.', import.meta.url)));
-const port = Number.parseInt(process.env.PORT ?? '8080', 10);
+const ROOT = resolve(fileURLToPath(new URL('.', import.meta.url)));
+const PORT = Number.parseInt(process.env.PORT || '8080', 10);
 
-const mimeTypes = new Map([
+const MIME_TYPES = new Map([
   ['.html', 'text/html; charset=utf-8'],
   ['.css', 'text/css; charset=utf-8'],
   ['.js', 'text/javascript; charset=utf-8'],
   ['.mjs', 'text/javascript; charset=utf-8'],
   ['.json', 'application/json; charset=utf-8'],
-  ['.svg', 'image/svg+xml; charset=utf-8'],
+  ['.svg', 'image/svg+xml'],
   ['.png', 'image/png'],
-  ['.jpg', 'image/jpeg'],
-  ['.jpeg', 'image/jpeg'],
   ['.webp', 'image/webp'],
-  ['.ico', 'image/x-icon']
+  ['.txt', 'text/plain; charset=utf-8'],
 ]);
 
-const securityHeaders = {
-  'Content-Security-Policy': "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
-  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
-  'Referrer-Policy': 'strict-origin-when-cross-origin',
-  'X-Content-Type-Options': 'nosniff',
-  'X-Frame-Options': 'DENY'
-};
+function safePathname(urlString) {
+  const pathname = decodeURIComponent(new URL(urlString, 'http://localhost').pathname);
+  const requested = pathname === '/' ? '/index.html' : pathname;
+  const normalized = normalize(requested).replace(/^([/\\])+/, '');
+  const absolute = resolve(join(ROOT, normalized));
+  return absolute === ROOT || absolute.startsWith(`${ROOT}${sep}`) ? absolute : null;
+}
 
-const send = (response, status, headers, body = '') => {
-  response.writeHead(status, { ...securityHeaders, ...headers });
-  response.end(body);
-};
+function securityHeaders() {
+  return {
+    'Content-Security-Policy': [
+      "default-src 'self'",
+      "img-src 'self' data: blob:",
+      "style-src 'self'",
+      "script-src 'self'",
+      "connect-src 'self'",
+      "base-uri 'none'",
+      "form-action 'none'",
+      "frame-ancestors 'none'",
+    ].join('; '),
+    'Cross-Origin-Opener-Policy': 'same-origin',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+  };
+}
 
-const server = http.createServer(async (request, response) => {
+const server = createServer(async (request, response) => {
+  const headers = securityHeaders();
+
+  if (request.url === '/healthz') {
+    response.writeHead(200, { ...headers, 'Content-Type': 'application/json; charset=utf-8' });
+    response.end(JSON.stringify({ ok: true, service: 'askiworld' }));
+    return;
+  }
+
+  if (!['GET', 'HEAD'].includes(request.method || 'GET')) {
+    response.writeHead(405, { ...headers, Allow: 'GET, HEAD', 'Content-Type': 'text/plain; charset=utf-8' });
+    response.end('Method Not Allowed');
+    return;
+  }
+
+  const filePath = safePathname(request.url || '/');
+  if (!filePath) {
+    response.writeHead(403, { ...headers, 'Content-Type': 'text/plain; charset=utf-8' });
+    response.end('Forbidden');
+    return;
+  }
+
   try {
-    const requestUrl = new URL(request.url ?? '/', `http://${request.headers.host ?? 'localhost'}`);
+    const stat = await fs.stat(filePath);
+    if (!stat.isFile()) throw new Error('Not a file');
 
-    if (requestUrl.pathname === '/healthz') {
-      send(response, 200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }, JSON.stringify({ ok: true }));
-      return;
-    }
+    const contentType = MIME_TYPES.get(extname(filePath).toLowerCase()) || 'application/octet-stream';
+    const cacheControl = filePath.endsWith('index.html') || filePath.includes('atlas-')
+      ? 'no-cache'
+      : 'public, max-age=604800, immutable';
 
-    const decodedPath = decodeURIComponent(requestUrl.pathname);
-    const relativePath = decodedPath === '/' ? 'index.html' : decodedPath.replace(/^\/+/, '');
-    const filePath = normalize(join(root, relativePath));
-    const relativeToRoot = relative(root, filePath);
-
-    if (relativeToRoot.startsWith(`..${sep}`) || relativeToRoot === '..') {
-      send(response, 403, { 'Content-Type': 'text/plain; charset=utf-8' }, 'Forbidden');
-      return;
-    }
-
-    const fileStats = await stat(filePath);
-    if (!fileStats.isFile()) throw new Error('Not a file');
-
-    const body = await readFile(filePath);
-    const extension = extname(filePath).toLowerCase();
-    const cacheControl = extension === '.html' ? 'no-cache' : 'public, max-age=3600';
-    const headers = {
-      'Content-Type': mimeTypes.get(extension) ?? 'application/octet-stream',
-      'Content-Length': body.byteLength,
-      'Cache-Control': cacheControl
-    };
+    response.writeHead(200, {
+      ...headers,
+      'Content-Type': contentType,
+      'Content-Length': stat.size,
+      'Cache-Control': cacheControl,
+    });
 
     if (request.method === 'HEAD') {
-      send(response, 200, headers);
+      response.end();
       return;
     }
 
-    if (request.method !== 'GET') {
-      send(response, 405, { 'Content-Type': 'text/plain; charset=utf-8', Allow: 'GET, HEAD' }, 'Method Not Allowed');
-      return;
-    }
-
-    send(response, 200, headers, body);
+    createReadStream(filePath).pipe(response);
   } catch {
-    send(response, 404, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' }, 'Not Found');
+    response.writeHead(404, { ...headers, 'Content-Type': 'text/plain; charset=utf-8' });
+    response.end('Not Found');
   }
 });
 
-server.listen(port, '0.0.0.0', () => {
-  console.log(`ASKIWORLD is running on http://0.0.0.0:${port}`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`ASKIWORLD is running on http://0.0.0.0:${PORT}`);
 });

@@ -1,64 +1,49 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#162d3d" />
-  <meta name="description" content="페이지들이 살아 있는 카툰 마을, ASKIWORLD의 첫 번째 포털입니다." />
-  <meta property="og:title" content="ASKIWORLD — 시작의 마을" />
-  <meta property="og:description" content="캐릭터와 함께 마을의 건물 문을 열고 새로운 페이지로 이동하세요." />
-  <meta property="og:type" content="website" />
-  <title>ASKIWORLD — 시작의 마을</title>
-  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="./styles.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07191b">
+  <meta name="description" content="캐릭터와 함께 마을을 탐험하고 건물의 문을 열어 여러 페이지로 이동하는 ASKIWORLD">
+  <meta property="og:title" content="ASKIWORLD — 여러 페이지로 연결된 세계">
+  <meta property="og:description" content="Agent Office 건물로 걸어가 문을 열고 페이지에 들어가세요.">
+  <title>ASKIWORLD — 여러 페이지로 연결된 세계</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <noscript>
-    <div class="noscript">ASKIWORLD를 이용하려면 JavaScript를 켜 주세요. <a href="https://agent-office.askipgh.chatgpt.site/">Agent Office 바로가기</a></div>
-  </noscript>
-  <main class="app" id="app" aria-label="ASKIWORLD 카툰 마을 포털" aria-busy="false">
-    <div class="world" id="world">
-      <svg class="scene" id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="카툰 렌더링 풍의 ASKIWORLD 마을과 Agent Office 건물"></svg>
-    </div>
-
-    <header class="topbar">
-      <div class="brand" aria-label="ASKIWORLD 로고">
-        <div class="brand-mark">A</div>
-        <div class="brand-copy">
-          <div class="brand-title">ASKIWORLD</div>
-          <div class="brand-sub">A WORLD OF LIVING PAGES</div>
-        </div>
+<noscript><div class="noscript">JavaScript를 켜 주세요. <a href="https://agent-office.askipgh.chatgpt.site/">Agent Office 바로가기</a></div></noscript>
+<main class="board is-loading" id="app" aria-busy="true">
+  <section class="top">
+    <aside class="sidebar panel">
+      <img data-asset="sidebar" alt="ASKIWORLD 소개와 Agent Office 첫 번째 링크">
+      <button class="sidebar-link" id="sidebarLink" aria-label="Agent Office로 이동해 들어가기"></button>
+    </aside>
+    <section class="world panel" id="world" tabindex="0" aria-label="직접 움직일 수 있는 ASKIWORLD 마을">
+      <img class="village" data-asset="village" alt="산과 숲으로 둘러싸인 카툰 마을과 Agent Office">
+      <div class="door" aria-hidden="true"><i></i><b class="left"></b><b class="right"></b></div>
+      <div class="player facing-up" id="player" aria-label="ASKIWORLD 여행자"><span></span><img id="sprite" data-asset="characterBack" alt=""></div>
+      <button class="hotspot office" id="office" aria-label="Agent Office. 클릭하면 캐릭터가 문으로 이동합니다"><em>Agent Office로 이동</em></button>
+      <button class="hotspot studio locked" data-name="Studio" aria-label="Studio, 준비 중"></button>
+      <button class="hotspot library locked" data-name="Library" aria-label="Library, 준비 중"></button>
+      <button class="hotspot windmill locked" data-name="Windmill" aria-label="Windmill, 준비 중"></button>
+      <div class="help"><kbd>WASD</kbd><kbd>방향키</kbd><span>이동 · 길/건물 클릭</span></div>
+      <button class="enter" id="enter"><kbd>E</kbd> 문 열고 들어가기</button>
+      <div class="pad" aria-label="모바일 이동 조작">
+        <button data-move="up">▲</button><button data-move="left">◀</button><button data-move="down">▼</button><button data-move="right">▶</button>
       </div>
-      <div class="world-meta" aria-label="현재 월드 상태">
-        <div class="world-chip">WORLD 01 · 시작의 마을</div>
-        <div class="portal-count">1 / 4 PORTALS OPEN</div>
-      </div>
-    </header>
-
-    <section class="info-card" id="infoCard" aria-labelledby="portalTitle">
-      <div class="eyebrow">Portal Online <span class="portal-index">01</span></div>
-      <h1 class="card-title" id="portalTitle">Agent Office</h1>
-      <p class="card-desc" id="portalDescription">ASKIWORLD의 첫 번째 건물입니다. 캐릭터가 길을 따라 문 앞까지 이동하고, 문이 열리면 실제 Agent Office 페이지로 들어갑니다.</p>
-      <p class="portal-url" aria-label="연결 주소">agent-office.askipgh.chatgpt.site</p>
-      <div class="actions">
-        <button class="primary" id="enterButton" type="button" aria-describedby="portalDescription">문 열고 들어가기 →</button>
-        <button class="secondary" id="previewButton" type="button">연출만 보기</button>
-      </div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <div class="transition" aria-hidden="true"><div class="rings"></div><strong>Agent Office</strong><span>페이지로 이동하는 중…</span></div>
     </section>
-
-    <div class="hint"><span class="mouse-icon"></span><span>건물이나 버튼을<br>클릭해 보세요</span></div>
-    <div class="transition-shutter" id="shutter"></div>
-    <div class="enter-label" id="enterLabel"><strong>Agent Office</strong><span>PORTAL CONNECTING…</span></div>
-    <div class="toast" id="toast" role="status" aria-live="polite">연출 미리보기 완료 · 실제 이동은 하지 않았어요.</div>
-    <div class="visually-hidden" id="liveStatus" aria-live="polite"></div>
-  </main>
-
-  <script src="./scene-part-1.js" defer></script>
-  <script src="./scene-part-2.js" defer></script>
-  <script src="./scene-part-3.js" defer></script>
-  <script src="./scene-part-4.js" defer></script>
-  <script src="./scene-part-5.js" defer></script>
-  <script src="./scene.js" defer></script>
-  <script src="./app.js" defer></script>
+  </section>
+  <section class="bottom">
+    <div class="bottom-left"><img data-asset="interaction" alt="ASKIWORLD 인터랙션 흐름"><img data-asset="mood" alt="전체 분위기와 색상 팔레트"></div>
+    <img data-asset="detail" alt="Agent Office와 캐릭터 상세 디자인">
+  </section>
+  <div class="loading" id="loading"><div><strong>ASKIWORLD</strong><span>마을을 불러오는 중…</span></div></div>
+</main>
+<div class="sr" id="live" aria-live="polite"></div>
+<script src="./atlas.js" defer></script>
+<script src="./app.js" defer></script>
 </body>
 </html>

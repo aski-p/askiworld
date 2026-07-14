@@ -1,14 +1,1 @@
-{
-  "name": "askiworld",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "description": "ASKIWORLD cartoon village portal hub",
-  "scripts": {
-    "start": "node server.mjs",
-    "check": "node --check server.mjs && node --check scene-part-1.js && node --check scene-part-2.js && node --check scene-part-3.js && node --check scene-part-4.js && node --check scene-part-5.js && node --check scene.js && node --check app.js"
-  },
-  "engines": {
-    "node": ">=20"
-  }
-}
+{"name":"askiworld","version":"3.0.0","private":true,"type":"module","description":"캐릭터가 건물로 이동해 페이지에 들어가는 ASKIWORLD 포털","scripts":{"start":"node server.mjs","check":"node --check atlas.js && node --check app.js && node --check server.mjs"},"engines":{"node":">=20"}}
