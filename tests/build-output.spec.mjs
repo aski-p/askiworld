@@ -35,15 +35,20 @@ test('production build emits only the fullscreen static application', async () =
   expect(html).not.toMatch(/컨셉 아트|sidebar|mobile-info|class="bottom"/);
 
   const vercel = JSON.parse(await fs.readFile('vercel.json', 'utf8'));
-  const headers = Object.fromEntries(vercel.headers?.[0]?.headers?.map(({ key, value }) => [key, value]) || []);
-  expect(vercel.headers?.[0]?.source).toBe('/(.*)');
-  expect(headers).toMatchObject({
-    'Cross-Origin-Opener-Policy': 'same-origin',
-    'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
-    'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
-  });
-  expect(headers['Content-Security-Policy']).toContain("default-src 'self'");
-  expect(headers['Content-Security-Policy']).toContain("frame-ancestors 'none'");
+  expect(vercel.headers).toEqual([
+    {
+      source: '/(.*)',
+      headers: [
+        {
+          key: 'Content-Security-Policy',
+          value: "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+        },
+        { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+        { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        { key: 'X-Content-Type-Options', value: 'nosniff' },
+        { key: 'X-Frame-Options', value: 'DENY' },
+        { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+      ],
+    },
+  ]);
 });
