@@ -6,7 +6,8 @@
   "description": "캐릭터가 건물로 이동해 페이지에 들어가는 ASKIWORLD 포털",
   "scripts": {
     "start": "node server.mjs",
-    "check": "node --check atlas.js && node --check app.js && node --check server.mjs",
+    "build": "node scripts/build.mjs",
+    "check": "node --check atlas.js && node --check app.js && node --check server.mjs && node --check scripts/build.mjs",
     "test:e2e": "playwright test",
     "test": "npm run check && npm run test:e2e"
   },

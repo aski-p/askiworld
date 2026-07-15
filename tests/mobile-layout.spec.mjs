@@ -25,7 +25,7 @@ const fullscreenGeometry = () => {
 test.describe('mobile fullscreen village', () => {
   test.use(iphone13);
 
-  test('fills the viewport with only the playable village', async ({ page }) => {
+  test('fills the viewport with only the playable village', async ({ page, context }) => {
     const errors = [];
     page.on('pageerror', (error) => errors.push(error.message));
     page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
@@ -46,16 +46,25 @@ test.describe('mobile fullscreen village', () => {
     expect(geometry.conceptNodes).toBe(0);
     expect(controls.every(({ width, height }) => width >= 48 && height >= 48)).toBeTruthy();
 
-    const before = await page.locator('#player').evaluate((element) => getComputedStyle(element).getPropertyValue('--x'));
+    const before = await page.evaluate(() => ({
+      playerX: getComputedStyle(document.querySelector('#player')).getPropertyValue('--x'),
+      camera: getComputedStyle(document.querySelector('#scene')).transform,
+    }));
     const right = page.locator('[data-move="right"]');
     const box = await right.boundingBox();
-    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    await page.mouse.down();
+    const touch = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+    const cdp = await context.newCDPSession(page);
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [touch] });
     await page.waitForTimeout(500);
-    await page.mouse.up();
-    const after = await page.locator('#player').evaluate((element) => getComputedStyle(element).getPropertyValue('--x'));
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await page.waitForTimeout(100);
+    const after = await page.evaluate(() => ({
+      playerX: getComputedStyle(document.querySelector('#player')).getPropertyValue('--x'),
+      camera: getComputedStyle(document.querySelector('#scene')).transform,
+    }));
 
-    expect(after).not.toBe(before);
+    expect(after.playerX).not.toBe(before.playerX);
+    expect(after.camera).not.toBe(before.camera);
     expect(errors).toEqual([]);
 
     await page.route('https://subagent-aski.vercel.app/**', (route) => route.fulfill({
@@ -63,7 +72,15 @@ test.describe('mobile fullscreen village', () => {
       contentType: 'text/html',
       body: '<title>Agent Office reached</title>',
     }));
-    await page.locator('#office').evaluate((element) => element.click());
+    const officePoint = await page.locator('#office').evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      const left = Math.max(1, rect.left);
+      const right = Math.min(innerWidth - 1, rect.right);
+      const top = Math.max(1, rect.top);
+      const bottom = Math.min(innerHeight - 1, rect.bottom);
+      return { x: (left + right) / 2, y: (top + bottom) / 2 };
+    });
+    await page.touchscreen.tap(officePoint.x, officePoint.y);
     await page.waitForURL('https://subagent-aski.vercel.app/**', { timeout: 10_000 });
   });
 });
