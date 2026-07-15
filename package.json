@@ -1,1 +1,19 @@
-{"name":"askiworld","version":"3.0.0","private":true,"type":"module","description":"캐릭터가 건물로 이동해 페이지에 들어가는 ASKIWORLD 포털","scripts":{"start":"node server.mjs","check":"node --check atlas.js && node --check app.js && node --check server.mjs"},"engines":{"node":">=20"}}
+{
+  "name": "askiworld",
+  "version": "3.1.0",
+  "private": true,
+  "type": "module",
+  "description": "캐릭터가 건물로 이동해 페이지에 들어가는 ASKIWORLD 포털",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node --check atlas.js && node --check app.js && node --check server.mjs",
+    "test:e2e": "playwright test",
+    "test": "npm run check && npm run test:e2e"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1"
+  }
+}

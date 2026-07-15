@@ -4,41 +4,33 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#07191b">
-  <meta name="description" content="캐릭터와 함께 마을을 탐험하고 건물의 문을 열어 여러 페이지로 이동하는 ASKIWORLD">
-  <meta property="og:title" content="ASKIWORLD — 여러 페이지로 연결된 세계">
-  <meta property="og:description" content="Agent Office 건물로 걸어가 문을 열고 페이지에 들어가세요.">
-  <title>ASKIWORLD — 여러 페이지로 연결된 세계</title>
+  <meta name="description" content="캐릭터를 움직여 Agent Office 문으로 들어가는 전체 화면 ASKIWORLD">
+  <meta property="og:title" content="ASKIWORLD — 마을을 탐험하세요">
+  <meta property="og:description" content="캐릭터를 움직여 Agent Office 건물의 문을 열고 들어가세요.">
+  <title>ASKIWORLD — 마을을 탐험하세요</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-<noscript><div class="noscript">JavaScript를 켜 주세요. <a href="https://agent-office.askipgh.chatgpt.site/">Agent Office 바로가기</a></div></noscript>
+<noscript><div class="noscript">JavaScript를 켜 주세요. <a href="https://subagent-aski.vercel.app/">Agent Office 바로가기</a></div></noscript>
 <main class="board is-loading" id="app" aria-busy="true">
-  <section class="top">
-    <aside class="sidebar panel">
-      <img data-asset="sidebar" alt="ASKIWORLD 소개와 Agent Office 첫 번째 링크">
-      <button class="sidebar-link" id="sidebarLink" aria-label="Agent Office로 이동해 들어가기"></button>
-    </aside>
-    <section class="world panel" id="world" tabindex="0" aria-label="직접 움직일 수 있는 ASKIWORLD 마을">
+  <section class="world" id="world" tabindex="0" aria-label="직접 움직일 수 있는 ASKIWORLD 마을">
+    <div class="scene" id="scene">
       <img class="village" data-asset="village" alt="산과 숲으로 둘러싸인 카툰 마을과 Agent Office">
       <div class="door" aria-hidden="true"><i></i><b class="left"></b><b class="right"></b></div>
       <div class="player facing-up" id="player" aria-label="ASKIWORLD 여행자"><span></span><img id="sprite" data-asset="characterBack" alt=""></div>
-      <button class="hotspot office" id="office" aria-label="Agent Office. 클릭하면 캐릭터가 문으로 이동합니다"><em>Agent Office로 이동</em></button>
+      <button class="hotspot office" id="office" aria-label="Agent Office. 누르면 캐릭터가 문으로 이동합니다"><em>Agent Office로 이동</em></button>
       <button class="hotspot studio locked" data-name="Studio" aria-label="Studio, 준비 중"></button>
       <button class="hotspot library locked" data-name="Library" aria-label="Library, 준비 중"></button>
       <button class="hotspot windmill locked" data-name="Windmill" aria-label="Windmill, 준비 중"></button>
-      <div class="help"><kbd>WASD</kbd><kbd>방향키</kbd><span>이동 · 길/건물 클릭</span></div>
-      <button class="enter" id="enter"><kbd>E</kbd> 문 열고 들어가기</button>
-      <div class="pad" aria-label="모바일 이동 조작">
-        <button data-move="up">▲</button><button data-move="left">◀</button><button data-move="down">▼</button><button data-move="right">▶</button>
-      </div>
-      <div class="toast" id="toast" role="status" aria-live="polite"></div>
-      <div class="transition" aria-hidden="true"><div class="rings"></div><strong>Agent Office</strong><span>페이지로 이동하는 중…</span></div>
-    </section>
-  </section>
-  <section class="bottom">
-    <div class="bottom-left"><img data-asset="interaction" alt="ASKIWORLD 인터랙션 흐름"><img data-asset="mood" alt="전체 분위기와 색상 팔레트"></div>
-    <img data-asset="detail" alt="Agent Office와 캐릭터 상세 디자인">
+    </div>
+    <div class="help"><span class="desktop-controls"><kbd>WASD</kbd><kbd>방향키</kbd><span>이동 · 길/건물 클릭</span></span><span class="mobile-controls">화면을 누르거나 방향키로 이동</span></div>
+    <button class="enter" id="enter"><kbd>E</kbd> 문 열고 들어가기</button>
+    <div class="pad" aria-label="모바일 이동 조작">
+      <button data-move="up" aria-label="위로 이동">▲</button><button data-move="left" aria-label="왼쪽으로 이동">◀</button><button data-move="down" aria-label="아래로 이동">▼</button><button data-move="right" aria-label="오른쪽으로 이동">▶</button>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="transition" aria-hidden="true"><div class="rings"></div><strong>Agent Office</strong><span>페이지로 이동하는 중…</span></div>
   </section>
   <div class="loading" id="loading"><div><strong>ASKIWORLD</strong><span>마을을 불러오는 중…</span></div></div>
 </main>

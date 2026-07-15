@@ -18,12 +18,29 @@ const MIME_TYPES = new Map([
   ['.txt', 'text/plain; charset=utf-8'],
 ]);
 
+const PUBLIC_PATHS = new Set([
+  '/index.html',
+  '/styles.css',
+  '/app.js',
+  '/atlas.js',
+  '/favicon.svg',
+  '/assets/village.png',
+  '/assets/character-back.png',
+  '/assets/character-front.png',
+  '/assets/character-side.png',
+]);
+
 function safePathname(urlString) {
-  const pathname = decodeURIComponent(new URL(urlString, 'http://localhost').pathname);
-  const requested = pathname === '/' ? '/index.html' : pathname;
-  const normalized = normalize(requested).replace(/^([/\\])+/, '');
-  const absolute = resolve(join(ROOT, normalized));
-  return absolute === ROOT || absolute.startsWith(`${ROOT}${sep}`) ? absolute : null;
+  try {
+    const pathname = decodeURIComponent(new URL(urlString, 'http://localhost').pathname);
+    const requested = pathname === '/' ? '/index.html' : pathname;
+    if (!PUBLIC_PATHS.has(requested)) return null;
+    const normalized = normalize(requested).replace(/^([/\\])+/, '');
+    const absolute = resolve(join(ROOT, normalized));
+    return absolute.startsWith(`${ROOT}${sep}`) ? absolute : null;
+  } catch {
+    return null;
+  }
 }
 
 function securityHeaders() {
@@ -63,8 +80,8 @@ const server = createServer(async (request, response) => {
 
   const filePath = safePathname(request.url || '/');
   if (!filePath) {
-    response.writeHead(403, { ...headers, 'Content-Type': 'text/plain; charset=utf-8' });
-    response.end('Forbidden');
+    response.writeHead(404, { ...headers, 'Content-Type': 'text/plain; charset=utf-8' });
+    response.end('Not Found');
     return;
   }
 
@@ -73,9 +90,7 @@ const server = createServer(async (request, response) => {
     if (!stat.isFile()) throw new Error('Not a file');
 
     const contentType = MIME_TYPES.get(extname(filePath).toLowerCase()) || 'application/octet-stream';
-    const cacheControl = filePath.endsWith('index.html') || filePath.includes('atlas-')
-      ? 'no-cache'
-      : 'public, max-age=604800, immutable';
+    const cacheControl = 'public, max-age=0, must-revalidate';
 
     response.writeHead(200, {
       ...headers,

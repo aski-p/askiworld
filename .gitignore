@@ -2,3 +2,5 @@
 node_modules/
 npm-debug.log*
 *.zip
+test-results/
+playwright-report/
