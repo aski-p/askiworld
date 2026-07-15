@@ -3,6 +3,8 @@
 
   const SOURCES = {
     village: './assets/village.png',
+    villageHD: './assets/village-hd.webp',
+    villageUHD: './assets/village-uhd.webp',
     characterBack: './assets/character-back.png',
     characterFront: './assets/character-front.png',
     characterSide: './assets/character-side.png',
@@ -18,19 +20,32 @@
   };
 
   async function load() {
-    await Promise.all(Object.values(SOURCES).map(async (source) => {
+    const movementSprites = [
+      SOURCES.characterBack,
+      SOURCES.characterFront,
+      SOURCES.characterSide,
+    ].map(async (source) => {
       const image = new Image();
       image.src = source;
       await image.decode();
-    }));
+    });
 
     document.querySelectorAll('[data-asset]').forEach((element) => {
+      if (element.dataset.asset === 'village') {
+        element.sizes = '(max-width: 760px) 1024px, 100vw';
+        element.srcset = `${SOURCES.village} 1184w, ${SOURCES.villageHD} 2368w, ${SOURCES.villageUHD} 4736w`;
+        element.src = SOURCES.village;
+        return;
+      }
       element.src = SOURCES[element.dataset.asset];
     });
 
-    await Promise.all([...document.querySelectorAll('[data-asset]')].map(async (image) => {
-      if (image.decode) await image.decode();
-    }));
+    await Promise.all([
+      ...movementSprites,
+      ...[...document.querySelectorAll('[data-asset]')].map(async (image) => {
+        if (image.decode) await image.decode();
+      }),
+    ]);
 
     app.classList.remove('is-loading');
     app.setAttribute('aria-busy', 'false');

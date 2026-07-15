@@ -13,6 +13,8 @@ test('production build emits only the fullscreen static application', async () =
     'assets/character-back.png',
     'assets/character-front.png',
     'assets/character-side.png',
+    'assets/village-hd.webp',
+    'assets/village-uhd.webp',
     'assets/village.png',
     'atlas.js',
     'favicon.svg',

@@ -4,6 +4,7 @@ const { defaultBrowserType: _defaultBrowserType, ...iphone13 } = devices['iPhone
 
 const ready = async (page) => {
   await page.goto('/');
+  await page.evaluate(() => window.ASKI_READY);
   await page.waitForFunction(() => document.querySelector('#app')?.getAttribute('aria-busy') === 'false');
 };
 
@@ -96,4 +97,18 @@ test('desktop also shows only a fullscreen playable village', async ({ page }) =
   expect(geometry.document.scrollHeight).toBe(geometry.viewport.height);
   expect(geometry.conceptNodes).toBe(0);
   await expect(page.locator('.pad')).toBeHidden();
+});
+
+test('large desktop selects the AI-enhanced HD village source', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await ready(page);
+  const currentPath = await page.locator('[data-asset="village"]').evaluate((element) => new URL(element.currentSrc).pathname);
+  expect(currentPath).toBe('/assets/village-hd.webp');
+});
+
+test('4K desktop selects the AI-enhanced UHD village source', async ({ page }) => {
+  await page.setViewportSize({ width: 3840, height: 2160 });
+  await ready(page);
+  const currentPath = await page.locator('[data-asset="village"]').evaluate((element) => new URL(element.currentSrc).pathname);
+  expect(currentPath).toBe('/assets/village-uhd.webp');
 });

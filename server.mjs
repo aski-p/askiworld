@@ -25,6 +25,8 @@ const PUBLIC_PATHS = new Set([
   '/atlas.js',
   '/favicon.svg',
   '/assets/village.png',
+  '/assets/village-hd.webp',
+  '/assets/village-uhd.webp',
   '/assets/character-back.png',
   '/assets/character-front.png',
   '/assets/character-side.png',

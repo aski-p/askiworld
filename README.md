@@ -10,6 +10,12 @@
 - Agent Office 건물을 누르면 캐릭터가 문 앞으로 자동 이동합니다.
 - 문 앞에서 `E`, `Enter` 또는 화면의 입장 버튼을 누르면 Agent Office로 이동합니다.
 
+## 배경 화질
+
+- Real-ESRGAN AI super-resolution으로 복원한 표준·HD·UHD 배경을 제공합니다.
+- 브라우저 `srcset`이 화면 폭과 pixel density에 맞춰 `1184px`, `2368px`, `4736px` 소스를 자동 선택합니다.
+- 세 해상도는 같은 구도와 hotspot 좌표를 공유하며 불필요한 고해상도 중복 다운로드를 피합니다.
+
 ## 현재 연결
 
 - Agent Office: `https://subagent-aski.vercel.app/`
@@ -39,4 +45,6 @@ Playwright 검증 범위:
 - 가로·세로 overflow가 없는지
 - 모바일 touch target이 48px 이상인지
 - 캐릭터 이동과 Agent Office 입장이 동작하는지
+- 표준·HD·UHD 배경 source가 viewport에 맞게 선택되는지
+- 선택된 고해상도 배경 로드 실패 시 게임이 비활성화되는지
 - console/page 오류가 없는지
