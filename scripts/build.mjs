@@ -10,6 +10,7 @@ const PUBLIC_FILES = [
   'app.js',
   'atlas.js',
   'favicon.svg',
+  'assets/dragon-flight.webp',
   'assets/village.png',
   'assets/village-hd.webp',
   'assets/village-uhd.webp',

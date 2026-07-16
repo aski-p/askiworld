@@ -32,6 +32,8 @@
     last: performance.now(),
     timer: 0,
     dragonTimer: 0,
+    walkFrame: 0,
+    nextWalkFrame: 0,
   };
 
   let sprites = {};
@@ -70,6 +72,13 @@
       : direction === 'down'
         ? sprites.characterFront
         : sprites.characterSide;
+    setWalkFrame(0);
+  }
+
+  function setWalkFrame(frameIndex) {
+    if (state.walkFrame === frameIndex && sprite.style.translate) return;
+    state.walkFrame = frameIndex;
+    sprite.style.translate = `${frameIndex * -25}% 0`;
   }
 
   function renderCamera() {
@@ -213,6 +222,15 @@
         moving = routeStep(delta);
       }
       player.classList.toggle('walking', moving);
+      if (moving) {
+        if (now >= state.nextWalkFrame) {
+          setWalkFrame((state.walkFrame + 1) % 4);
+          state.nextWalkFrame = now + 115;
+        }
+      } else {
+        setWalkFrame(0);
+        state.nextWalkFrame = now;
+      }
       render();
     }
     requestAnimationFrame(frame);
@@ -313,6 +331,7 @@
     state.ready = true;
     state.last = performance.now();
     sprite.src = assets.characterBack;
+    setWalkFrame(0);
     render();
     world.focus({ preventScroll: true });
     scheduleDragon(true);

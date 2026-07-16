@@ -13,6 +13,7 @@ test('production build emits only the fullscreen static application', async () =
     'assets/character-back.png',
     'assets/character-front.png',
     'assets/character-side.png',
+    'assets/dragon-flight.webp',
     'assets/village-hd.webp',
     'assets/village-night-hd.webp',
     'assets/village-night-uhd.webp',

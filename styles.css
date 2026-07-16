@@ -167,32 +167,30 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
 
 .dragon-event {
   position: absolute;
-  left: 17%;
-  top: 7.5%;
-  width: 5.6%;
-  color: #24332d;
+  left: 12%;
+  top: 3.5%;
+  width: 12%;
+  aspect-ratio: 1;
   opacity: 0;
-  filter: drop-shadow(0 2px 1px #d9efff66);
+  filter: drop-shadow(0 3px 2px #111b1a66) drop-shadow(0 0 3px #d9efff55);
   will-change: transform, opacity;
 }
 .dragon-event.is-active { animation: dragonFlight 9s cubic-bezier(.32, .08, .65, .98) both; }
-.dragon { width: 100%; overflow: visible; }
-.dragon .body,
-.dragon .neck,
-.dragon .head,
-.dragon .tail,
-.dragon .wing { fill: currentColor; stroke: #11231d; stroke-width: 2; stroke-linejoin: round; }
-.dragon .wing-back { opacity: .72; animation: dragonWingBack .58s ease-in-out infinite alternate; transform-origin: 88px 50px; }
-.dragon .wing-front { animation: dragonWing .58s ease-in-out infinite alternate; transform-origin: 84px 53px; }
-.dragon .horn,
-.dragon .leg { fill: none; stroke: #172820; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
-.dragon .eye { fill: #ffd76b; stroke: #49280c; stroke-width: 1; }
+.dragon-sprite {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: block;
+  background: url("./assets/dragon-flight.webp?v=7") 0 0 / 300% 100% no-repeat;
+  animation: dragonFrames .72s linear infinite;
+}
 .dragon-flame {
   position: absolute;
-  left: 91%;
-  top: 36%;
-  width: 105%;
-  height: 27%;
+  z-index: 1;
+  left: 80%;
+  top: 52%;
+  width: 82%;
+  height: 15%;
   opacity: 0;
   transform: rotate(8deg) scaleX(.05);
   transform-origin: left center;
@@ -204,13 +202,16 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
 @keyframes dragonFlight {
   0% { opacity: 0; transform: translate3d(-90%, 45%, 0) scale(.72) rotate(-4deg); }
   10% { opacity: .82; }
-  38% { transform: translate3d(170%, -16%, 0) scale(.9) rotate(2deg); }
-  57% { opacity: .96; transform: translate3d(330%, 22%, 0) scale(1) rotate(-1deg); }
-  78% { opacity: .78; transform: translate3d(470%, -8%, 0) scale(.84) rotate(3deg); }
-  100% { opacity: 0; transform: translate3d(620%, 34%, 0) scale(.62) rotate(-2deg); }
+  38% { transform: translate3d(70%, -16%, 0) scale(.9) rotate(2deg); }
+  57% { opacity: .98; transform: translate3d(150%, 13%, 0) scale(1) rotate(-1deg); }
+  78% { opacity: .82; transform: translate3d(330%, -8%, 0) scale(.88) rotate(3deg); }
+  100% { opacity: 0; transform: translate3d(560%, 24%, 0) scale(.68) rotate(-2deg); }
 }
-@keyframes dragonWing { from { transform: rotate(12deg) scaleY(.65); } to { transform: rotate(-9deg) scaleY(1.12); } }
-@keyframes dragonWingBack { from { transform: rotate(-8deg) scaleY(.72); } to { transform: rotate(9deg) scaleY(1.08); } }
+@keyframes dragonFrames {
+  0%, 31% { background-position: 0 0; }
+  32%, 64% { background-position: 50% 0; }
+  65%, 100% { background-position: 100% 0; }
+}
 @keyframes dragonBreath {
   0%, 47%, 54%, 70%, 100% { opacity: 0; transform: rotate(8deg) scaleX(.05) scaleY(.45); }
   57%, 65% { opacity: .96; transform: rotate(8deg) scaleX(1) scaleY(1); }
@@ -231,8 +232,26 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   pointer-events: none;
   filter: drop-shadow(0 4px 3px #180c036b) saturate(1.04);
 }
-.player img { position: relative; z-index: 2; image-rendering: auto; backface-visibility: hidden; }
-.player.facing-right img { transform: scaleX(-1); }
+.player .sprite-window {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  aspect-ratio: 1 / 2;
+  overflow: hidden;
+  transform-origin: center bottom;
+}
+.player img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 400%;
+  max-width: none;
+  height: 100%;
+  image-rendering: auto;
+  backface-visibility: hidden;
+  will-change: translate;
+}
+.player.facing-right .sprite-window { transform: scaleX(-1); }
 .player span {
   position: absolute;
   z-index: 1;
@@ -244,14 +263,9 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   background: #19140a66;
   filter: blur(2px);
 }
-.player.walking img { animation: walk .32s ease-in-out infinite; }
 .player.going {
   animation: doorIn .68s cubic-bezier(.3, .8, .3, 1) forwards;
   filter: drop-shadow(0 0 14px #ffcc5ef2);
-}
-@keyframes walk {
-  0%, 100% { translate: 0 0; rotate: -.7deg; }
-  50% { translate: 0 -3.5%; rotate: .7deg; }
 }
 @keyframes doorIn {
   0% { transform: translate(-50%, -100%) scale(1); opacity: 1; }
@@ -377,7 +391,7 @@ html[data-period="night"] .world::after {
 html[data-period="night"] .sunwash { opacity: 0; animation: none; }
 html[data-period="night"] .breeze i { background: linear-gradient(135deg, #6ba9a2, #1d5560); box-shadow: 0 0 4px #8ee7e655; }
 html[data-period="night"] .flock { color: #8db5c3; filter: drop-shadow(0 0 2px #061327); opacity: .48; }
-html[data-period="night"] .dragon-event { color: #182338; filter: drop-shadow(0 1px 2px #8fbaff66); }
+html[data-period="night"] .dragon-event { filter: drop-shadow(0 2px 3px #020713) drop-shadow(0 0 4px #8fbaff77); }
 html[data-period="night"] .dragon-flame { filter: drop-shadow(0 0 7px #ffb02c) drop-shadow(0 0 18px #ff471dcc); }
 html[data-period="night"] .hotspot::after {
   background: linear-gradient(180deg, #3c5267 0 15%, #26394b 16% 100%);
@@ -552,7 +566,7 @@ kbd {
   .enter { bottom: max(7.5rem, calc(6.5rem + env(safe-area-inset-bottom))); font-size: .78rem; }
   .flock-two { display: none; }
   .flock-one { opacity: .55; }
-  .dragon-event { width: 6.2%; }
+  .dragon-event { width: 13.5%; }
   .dragon-flame { filter: none; }
 }
 

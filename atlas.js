@@ -2,12 +2,12 @@
   'use strict';
 
   const SOURCES = {
-    village: './assets/village.png?v=6',
-    villageHD: './assets/village-hd.webp?v=6',
-    villageUHD: './assets/village-uhd.webp?v=6',
-    characterBack: './assets/character-back.png?v=6',
-    characterFront: './assets/character-front.png?v=6',
-    characterSide: './assets/character-side.png?v=6',
+    village: './assets/village.png?v=7',
+    villageHD: './assets/village-hd.webp?v=7',
+    villageUHD: './assets/village-uhd.webp?v=7',
+    characterBack: './assets/character-back.png?v=7',
+    characterFront: './assets/character-front.png?v=7',
+    characterSide: './assets/character-side.png?v=7',
   };
   const VILLAGES = {
     day: {
@@ -16,9 +16,9 @@
       uhd: SOURCES.villageUHD,
     },
     night: {
-      base: './assets/village-night.png?v=6',
-      hd: './assets/village-night-hd.webp?v=6',
-      uhd: './assets/village-night-uhd.webp?v=6',
+      base: './assets/village-night.png?v=7',
+      hd: './assets/village-night-hd.webp?v=7',
+      uhd: './assets/village-night-uhd.webp?v=7',
     },
   };
   const SEOUL_OFFSET = 9 * 60 * 60 * 1000;

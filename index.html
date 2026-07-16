@@ -9,7 +9,7 @@
   <meta property="og:description" content="캐릭터를 움직여 Agent Office 건물의 문을 열고 들어가세요.">
   <title>ASKIWORLD — 마을을 탐험하세요</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=6">
+  <link rel="stylesheet" href="./styles.css?v=7">
 </head>
 <body>
 <noscript><div class="noscript">JavaScript를 켜 주세요. <a href="https://subagent-aski.vercel.app/">Agent Office 바로가기</a></div></noscript>
@@ -23,22 +23,12 @@
         <div class="flock flock-one"><i></i><i></i><i></i><i></i><i></i></div>
         <div class="flock flock-two"><i></i><i></i><i></i><i></i></div>
         <div class="dragon-event" id="dragonEvent">
-          <svg class="dragon" viewBox="0 0 180 90" focusable="false">
-            <path class="wing wing-back" d="M78 47C68 22 79 8 103 5 95 19 102 31 122 38 104 38 94 42 87 52Z"/>
-            <path class="tail" d="M57 58C35 66 20 63 6 52 23 57 30 48 43 46Z"/>
-            <path class="body" d="M42 48C58 37 79 38 95 48 108 56 124 54 137 45L154 49 139 58C122 68 107 68 91 61 75 55 60 59 48 63Z"/>
-            <path class="neck" d="M119 54C124 40 134 31 148 28L163 34 153 43 139 42 132 57Z"/>
-            <path class="head" d="M145 27 161 23 175 30 166 38 149 37 139 31Z"/>
-            <path class="horn" d="M148 27 151 16 158 25M160 25 169 17 167 29"/>
-            <path class="wing wing-front" d="M84 51C68 27 52 19 31 20 47 31 47 45 39 59 58 46 69 49 87 62Z"/>
-            <path class="leg" d="M77 59 70 76 61 78M104 62 108 78 118 80"/>
-            <circle class="eye" cx="163" cy="30" r="2.4"/>
-          </svg>
+          <span class="dragon-sprite"></span>
           <span class="dragon-flame"></span>
         </div>
       </div>
       <div class="door" aria-hidden="true"><i></i><b class="left"></b><b class="right"></b></div>
-      <div class="player facing-up" id="player" aria-label="ASKIWORLD 여행자"><span></span><img id="sprite" data-asset="characterBack" alt=""></div>
+      <div class="player facing-up" id="player" aria-label="ASKIWORLD 여행자"><span></span><div class="sprite-window"><img id="sprite" data-asset="characterBack" alt=""></div></div>
       <button class="hotspot office" id="office" data-name="Agent Office" aria-label="Agent Office. 누르면 캐릭터가 문으로 이동합니다"><em>Agent Office로 이동</em></button>
       <button class="hotspot studio locked" data-name="Studio" aria-label="Studio, 준비 중"></button>
       <button class="hotspot library locked" data-name="Library" aria-label="Library, 준비 중"></button>
@@ -55,7 +45,7 @@
   <div class="loading" id="loading"><div><strong>ASKIWORLD</strong><span>마을을 불러오는 중…</span></div></div>
 </main>
 <div class="sr" id="live" aria-live="polite"></div>
-<script src="./atlas.js?v=6" defer></script>
-<script src="./app.js?v=6" defer></script>
+<script src="./atlas.js?v=7" defer></script>
+<script src="./app.js?v=7" defer></script>
 </body>
 </html>
