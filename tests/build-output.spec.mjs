@@ -13,7 +13,9 @@ test('production build emits only the fullscreen static application', async () =
     'assets/character-back.png',
     'assets/character-front.png',
     'assets/character-side.png',
+    'assets/dragon-breath.webp',
     'assets/dragon-flight.webp',
+    'assets/house-flame.webp',
     'assets/roof-fire.webp',
     'assets/village-hd.webp',
     'assets/village-night-hd.webp',
@@ -40,6 +42,12 @@ test('production build emits only the fullscreen static application', async () =
   expect((await files('dist')).sort()).toEqual(expected);
   const html = await fs.readFile('dist/index.html', 'utf8');
   expect(html).not.toMatch(/컨셉 아트|sidebar|mobile-info|class="bottom"/);
+  expect(html).toContain('class="library-fire-scene"');
+  expect(html).toContain('class="dragon-breath"');
+  const css = await fs.readFile('dist/styles.css', 'utf8');
+  expect(css).toContain('assets/dragon-breath.webp?v=10');
+  expect(css).toContain('assets/house-flame.webp?v=10');
+  expect(css).toContain('@keyframes houseFireLife');
 
   const vercel = JSON.parse(await fs.readFile('vercel.json', 'utf8'));
   expect(vercel.headers).toEqual([

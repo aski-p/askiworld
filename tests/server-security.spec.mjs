@@ -17,7 +17,9 @@ test('mutable application files require revalidation and assets have correct MIM
   }
 
   for (const [path, mime] of [
+    ['/assets/dragon-breath.webp', 'image/webp'],
     ['/assets/dragon-flight.webp', 'image/webp'],
+    ['/assets/house-flame.webp', 'image/webp'],
     ['/assets/roof-fire.webp', 'image/webp'],
     ['/assets/village.png', 'image/png'],
     ['/assets/village-hd.webp', 'image/webp'],

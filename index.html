@@ -9,7 +9,7 @@
   <meta property="og:description" content="캐릭터를 움직여 Agent Office 건물의 문을 열고 들어가세요.">
   <title>ASKIWORLD — 마을을 탐험하세요</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=9">
+  <link rel="stylesheet" href="./styles.css?v=10">
 </head>
 <body>
 <noscript><div class="noscript">JavaScript를 켜 주세요. <a href="https://subagent-aski.vercel.app/">Agent Office 바로가기</a></div></noscript>
@@ -24,14 +24,29 @@
         <div class="flock flock-two"><i></i><i></i><i></i><i></i></div>
         <div class="dragon-event" id="dragonEvent">
           <span class="dragon-sprite"></span>
-          <span class="dragon-flame"></span>
+          <span class="dragon-mouth-glow"></span>
+          <span class="dragon-breath">
+            <span class="dragon-breath-glow"></span>
+            <span class="dragon-breath-sprite"></span>
+            <i></i><i></i><i></i><i></i>
+          </span>
         </div>
       </div>
-      <div class="library-roof-fire" id="libraryRoofFire" aria-hidden="true">
-        <span class="roof-scorch"></span>
-        <span class="roof-fire-glow"></span>
-        <span class="roof-fire-sprite"></span>
-        <i></i><i></i><i></i><i></i><i></i>
+      <div class="library-fire-scene" id="libraryRoofFire" aria-hidden="true">
+        <span class="house-smoke"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        <span class="roof-char"></span>
+        <span class="facade-heat"></span>
+        <span class="roof-flame roof-flame-left"></span>
+        <span class="roof-flame roof-flame-main"></span>
+        <span class="roof-flame roof-flame-right"></span>
+        <span class="roof-flame roof-flame-eave"></span>
+        <span class="window-blaze window-attic"></span>
+        <span class="window-blaze window-upper"></span>
+        <span class="window-blaze window-lower-left"></span>
+        <span class="window-blaze window-lower-right"></span>
+        <span class="door-heat"></span>
+        <span class="roof-impact"><b></b><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        <span class="house-embers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
       </div>
       <div class="door" aria-hidden="true"><i></i><b class="left"></b><b class="right"></b></div>
       <div class="player facing-up" id="player" aria-label="ASKIWORLD 여행자"><span></span><div class="sprite-window"><img id="sprite" data-asset="characterBack" alt=""></div></div>
@@ -51,7 +66,7 @@
   <div class="loading" id="loading"><div><strong>ASKIWORLD</strong><span>마을을 불러오는 중…</span></div></div>
 </main>
 <div class="sr" id="live" aria-live="polite"></div>
-<script src="./atlas.js?v=9" defer></script>
-<script src="./app.js?v=9" defer></script>
+<script src="./atlas.js?v=10" defer></script>
+<script src="./app.js?v=10" defer></script>
 </body>
 </html>

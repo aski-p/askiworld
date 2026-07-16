@@ -181,24 +181,78 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   z-index: 2;
   inset: 0;
   display: block;
-  background: url("./assets/dragon-flight.webp?v=9") 0 0 / 300% 100% no-repeat;
-  animation: dragonFrames .72s linear infinite;
+  background: url("./assets/dragon-flight.webp?v=10") 0 0 / 300% 100% no-repeat;
+  transform-origin: 58% 56%;
 }
-.dragon-flame {
+.dragon-event.is-active .dragon-sprite {
+  animation: dragonFrames .72s linear infinite, dragonFireRecoil 9s ease-in-out both;
+}
+.dragon-mouth-glow {
+  position: absolute;
+  z-index: 4;
+  left: 84.5%;
+  top: 51%;
+  width: 15%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fffbd8 0 8%, #ffd74f 22%, #ff6c1c99 48%, transparent 72%);
+  filter: blur(2px) drop-shadow(0 0 5px #ff9b24);
+  opacity: 0;
+  pointer-events: none;
+}
+.dragon-event.is-active .dragon-mouth-glow { animation: dragonMouthGlow 9s ease-in-out both; }
+.dragon-breath {
+  position: absolute;
+  z-index: 3;
+  left: 87.5%;
+  top: 30%;
+  width: 146%;
+  aspect-ratio: 2.65 / 1;
+  opacity: 0;
+  transform: rotate(32deg) scaleX(.04) scaleY(.42);
+  transform-origin: left center;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.dragon-event.is-active .dragon-breath { animation: dragonBreath 9s ease-in-out both; }
+.dragon-breath-sprite {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: url("./assets/dragon-breath.webp?v=10") 0 0 / 600% 100% no-repeat;
+  filter: saturate(1.08) contrast(1.06) drop-shadow(0 0 3px #ffe46d) drop-shadow(0 0 9px #ff4a16cc);
+  will-change: background-position;
+}
+.dragon-event.is-active .dragon-breath-sprite { animation: dragonBreathFrames .54s steps(1, end) infinite; }
+.dragon-breath-glow {
   position: absolute;
   z-index: 1;
-  left: 80%;
-  top: 52%;
-  width: 135%;
-  height: 13%;
-  opacity: 0;
-  transform: rotate(31deg) scaleX(.05);
-  transform-origin: left center;
-  clip-path: polygon(0 38%, 30% 7%, 25% 34%, 68% 0, 57% 38%, 100% 48%, 58% 66%, 72% 100%, 26% 67%, 31% 94%, 0 60%);
-  background: linear-gradient(90deg, #fff9b3 0 16%, #ffc13a 34%, #ff681c 66%, #ee2510 82%, transparent 100%);
-  filter: drop-shadow(0 0 5px #ff7a19) drop-shadow(0 0 12px #ff3b0a99);
+  left: -2%;
+  top: 22%;
+  width: 106%;
+  height: 56%;
+  border-radius: 48%;
+  background: linear-gradient(90deg, #fff5aacc, #ff9c3299 42%, #ff431d66 78%, transparent);
+  filter: blur(9px);
+  mix-blend-mode: screen;
+  animation: breathGlow .24s ease-in-out infinite alternate;
 }
-.dragon-event.is-active .dragon-flame { animation: dragonBreath 9s ease-in-out both; }
+.dragon-breath i {
+  position: absolute;
+  z-index: 3;
+  left: 54%;
+  top: 45%;
+  width: 2.3%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff4a0;
+  box-shadow: 0 0 4px #ffc62c, 0 0 8px #ff4b17;
+  opacity: 0;
+  animation: breathSpark .72s ease-out infinite;
+}
+.dragon-breath i:nth-of-type(2) { left: 67%; top: 32%; scale: .72; animation-delay: -.21s; }
+.dragon-breath i:nth-of-type(3) { left: 79%; top: 57%; scale: 1.2; animation-delay: -.43s; }
+.dragon-breath i:nth-of-type(4) { left: 91%; top: 41%; scale: .58; animation-delay: -.61s; }
 @keyframes dragonFlight {
   0% { opacity: 0; transform: translate3d(-120%, -20%, 0) scale(.68) rotate(-4deg); }
   10% { opacity: .82; }
@@ -213,84 +267,255 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   32%, 64% { background-position: 50% 0; }
   65%, 100% { background-position: 100% 0; }
 }
+@keyframes dragonFireRecoil {
+  0%, 44%, 71%, 100% { transform: translate3d(0, 0, 0) rotate(0); filter: brightness(1); }
+  48% { transform: translate3d(-2.8%, 1.2%, 0) rotate(1.4deg); filter: brightness(1.08); }
+  55%, 65% { transform: translate3d(-4%, 1.8%, 0) rotate(2deg); filter: brightness(1.13); }
+  68% { transform: translate3d(-1.5%, .5%, 0) rotate(.6deg); filter: brightness(1.04); }
+}
+@keyframes dragonMouthGlow {
+  0%, 43%, 70%, 100% { opacity: 0; transform: scale(.25); }
+  46% { opacity: .74; transform: scale(.8); }
+  50%, 66% { opacity: 1; transform: scale(1.35); }
+  57% { opacity: .86; transform: scale(1); }
+}
 @keyframes dragonBreath {
-  0%, 45%, 69%, 100% { opacity: 0; transform: rotate(31deg) scaleX(.05) scaleY(.45); }
-  49%, 65% { opacity: .96; transform: rotate(31deg) scaleX(1) scaleY(1); }
-  57% { opacity: 1; transform: rotate(29deg) scaleX(1.08) scaleY(.84); }
+  0%, 44%, 70%, 100% { opacity: 0; transform: rotate(32deg) translateX(-3%) scaleX(.04) scaleY(.42); }
+  47% { opacity: .86; transform: rotate(32deg) translateX(0) scaleX(.76) scaleY(.82); }
+  50%, 66% { opacity: 1; transform: rotate(32deg) translateX(0) scaleX(1) scaleY(1); }
+  56% { opacity: 1; transform: rotate(31deg) translateX(0) scaleX(1.06) scaleY(.92); }
+  68% { opacity: .72; transform: rotate(33deg) translateX(0) scaleX(.64) scaleY(.78); }
+}
+@keyframes dragonBreathFrames {
+  0%, 16.65% { background-position: 0 0; }
+  16.67%, 33.31% { background-position: 20% 0; }
+  33.33%, 49.98% { background-position: 40% 0; }
+  50%, 66.64% { background-position: 60% 0; }
+  66.66%, 83.31% { background-position: 80% 0; }
+  83.33%, 100% { background-position: 100% 0; }
+}
+@keyframes breathGlow { to { opacity: .68; transform: scaleY(.82); } }
+@keyframes breathSpark {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) scale(.35); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(62px, -28px, 0) scale(1.15); }
 }
 
-.library-roof-fire {
+.library-fire-scene {
   position: absolute;
   z-index: 6;
-  left: 44.45%;
-  top: 7.7%;
-  width: 9.6%;
-  aspect-ratio: 2 / 3;
-  opacity: 0;
+  left: 39.7%;
+  top: 23.1%;
+  width: 16.3%;
+  height: 39.5%;
   pointer-events: none;
-  transform: translateY(12%) scale(.18);
+  contain: layout style;
+}
+.library-fire-scene.is-burning { animation: houseFireLife 20s linear both; }
+.roof-flame {
+  position: absolute;
+  z-index: 5;
+  aspect-ratio: 181 / 140;
+  opacity: 0;
+  background: url("./assets/house-flame.webp?v=10") 0 0 / 600% 100% no-repeat;
+  filter: saturate(1.12) contrast(1.05) drop-shadow(0 0 3px #ffe26a) drop-shadow(0 0 9px #f44a16d9);
   transform-origin: 50% 100%;
-  will-change: transform, opacity;
+  will-change: background-position, transform, opacity;
 }
-.library-roof-fire.is-burning { animation: roofFireLife 18s ease-out both; }
-.roof-fire-sprite {
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-  background: url("./assets/roof-fire.webp?v=9") 0 0 / 600% 100% no-repeat;
-  filter: saturate(1.1) contrast(1.035) drop-shadow(0 0 3px #ffcc45) drop-shadow(0 0 9px #f44a16cc);
-  animation: roofFireFrames .78s steps(1, end) infinite;
-  will-change: background-position;
+.roof-flame-main {
+  --delay: .12s;
+  --speed: .72s;
+  --tilt: -1deg;
+  left: 31%;
+  top: -60%;
+  width: 54%;
+  z-index: 6;
+  aspect-ratio: 2 / 3;
+  background-image: url("./assets/roof-fire.webp?v=10");
 }
-.roof-scorch {
-  position: absolute;
-  z-index: 1;
-  left: 2%;
-  right: 2%;
-  bottom: 1%;
-  height: 14%;
-  border-radius: 50%;
-  background: radial-gradient(ellipse, #fff29fe8 0 4%, #ff8a1ebd 18%, #8f1d0bd9 42%, #28100dd9 64%, transparent 74%);
-  filter: blur(1.4px);
-  transform: rotate(-2deg) scaleX(1.12);
+.roof-flame-left { --delay: .58s; --speed: .83s; --tilt: -12deg; left: 0; top: 27%; width: 43%; }
+.roof-flame-right { --delay: .92s; --speed: .67s; --tilt: 8deg; left: 29%; top: 12%; width: 67%; }
+.roof-flame-eave { --delay: 1.42s; --speed: .77s; --tilt: -6deg; left: 16%; top: 36%; width: 44%; z-index: 7; }
+.library-fire-scene.is-burning .roof-flame {
+  animation: structureFlameLife 18.4s ease-out var(--delay) both, roofFireFrames var(--speed) steps(1, end) infinite;
 }
-.roof-fire-glow {
+.roof-char {
   position: absolute;
   z-index: 2;
-  left: -55%;
-  right: -55%;
-  bottom: -9%;
-  height: 59%;
-  border-radius: 50%;
-  background: radial-gradient(ellipse, #fffbd6e8 0 4%, #ffd45fc7 12%, #ff791d9e 30%, #f22f174a 54%, transparent 72%);
-  filter: blur(7px);
-  mix-blend-mode: screen;
-  animation: roofGlow .36s ease-in-out infinite alternate;
+  left: 1%;
+  top: 4%;
+  width: 98%;
+  height: 58%;
+  opacity: 0;
+  clip-path: polygon(2% 76%, 33% 10%, 45% 0, 58% 15%, 68% 5%, 100% 51%, 82% 100%, 48% 68%, 25% 100%);
+  background:
+    radial-gradient(circle at 56% 29%, #ff6d1d9c 0 2%, #32130be6 12%, transparent 31%),
+    repeating-linear-gradient(112deg, #100907e8 0 3px, #742310c7 4px 6px, transparent 7px 15px),
+    linear-gradient(145deg, #1a0c08f0, #050303d9);
+  mix-blend-mode: multiply;
+  filter: blur(.25px);
 }
-.library-roof-fire i {
+.library-fire-scene.is-burning .roof-char { animation: roofChar 20s ease-out .35s both; }
+.facade-heat {
+  position: absolute;
+  z-index: 3;
+  left: 2%;
+  top: 27%;
+  width: 96%;
+  height: 72%;
+  opacity: 0;
+  clip-path: polygon(18% 6%, 47% 17%, 70% 2%, 98% 29%, 94% 100%, 8% 100%, 5% 34%);
+  background: radial-gradient(ellipse at 49% 24%, #fff3a8c2 0 3%, #ff9a307d 17%, #ff4c213d 46%, transparent 73%);
+  filter: blur(5px);
+  mix-blend-mode: screen;
+}
+.library-fire-scene.is-burning .facade-heat { animation: facadeBurn 20s ease-out 1.1s both, facadeFlicker .34s ease-in-out 2s infinite alternate; }
+.house-smoke {
   position: absolute;
   z-index: 4;
+  left: 2%;
+  top: -88%;
+  width: 96%;
+  height: 112%;
+  opacity: .9;
+}
+.house-smoke i {
+  --drift: 12px;
+  --duration: 4.8s;
+  --delay: 0s;
+  position: absolute;
+  left: 43%;
+  bottom: 0;
+  width: 34%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 42% 58%, #261e1ce8 0 25%, #4c403bc4 47%, #71676254 68%, transparent 75%);
+  filter: blur(2.4px);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.house-smoke i:nth-child(2) { left: 18%; width: 29%; --drift: -17px; --duration: 5.3s; --delay: -.8s; }
+.house-smoke i:nth-child(3) { left: 57%; width: 27%; --drift: 19px; --duration: 4.4s; --delay: -1.9s; }
+.house-smoke i:nth-child(4) { left: 32%; width: 42%; --drift: -8px; --duration: 5.9s; --delay: -2.7s; }
+.house-smoke i:nth-child(5) { left: 6%; width: 25%; --drift: -24px; --duration: 4.7s; --delay: -3.2s; }
+.house-smoke i:nth-child(6) { left: 70%; width: 24%; --drift: 27px; --duration: 5.6s; --delay: -4.1s; }
+.house-smoke i:nth-child(7) { left: 46%; width: 31%; --drift: 7px; --duration: 4.9s; --delay: -3.7s; }
+.library-fire-scene.is-burning .house-smoke i { animation: houseSmokeRise var(--duration) ease-out calc(var(--delay) + .8s) infinite; }
+.window-blaze,
+.door-heat {
+  --delay: 1.8s;
+  position: absolute;
+  z-index: 8;
+  border-radius: 30% 30% 12% 12%;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 62%, #fffbd3 0 12%, #ffd34d 28%, #ff6f1f 58%, #a6200c 76%, transparent 78%);
+  box-shadow: 0 0 5px #ffd24e, 0 0 13px #ff4d1fa8;
+  mix-blend-mode: screen;
+  transform-origin: 50% 100%;
+}
+.window-blaze::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  bottom: 75%;
+  width: 76%;
+  height: 85%;
+  clip-path: polygon(48% 100%, 0 100%, 21% 46%, 42% 67%, 61% 0, 100% 100%);
+  background: linear-gradient(#fff6a8, #ff8a20 47%, #e62d10 88%, transparent);
+  filter: drop-shadow(0 0 3px #ff6a1c);
+}
+.window-attic { --delay: 1.55s; left: 27.8%; top: 43.5%; width: 7%; height: 12%; }
+.window-upper { --delay: 2.25s; left: 68.5%; top: 45%; width: 6.4%; height: 11%; }
+.window-lower-left { --delay: 2.8s; left: 16%; top: 76%; width: 5.6%; height: 10%; }
+.window-lower-right { --delay: 3.15s; left: 72.5%; top: 75.5%; width: 5.8%; height: 10.5%; }
+.door-heat { --delay: 3.4s; left: 41.5%; top: 73%; width: 11%; height: 22%; border-radius: 45% 45% 8% 8%; }
+.library-fire-scene.is-burning .window-blaze,
+.library-fire-scene.is-burning .door-heat {
+  animation: windowIgnite 17s ease-out var(--delay) both, windowFlicker .36s ease-in-out calc(var(--delay) + .5s) infinite alternate;
+}
+.roof-impact {
+  position: absolute;
+  z-index: 10;
+  left: 47%;
+  top: 22%;
+  width: 29%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(circle, #fff 0 4%, #fff6a7 8%, #ffc536 24%, #ff5c1e8f 48%, transparent 72%);
+  filter: blur(.4px) drop-shadow(0 0 9px #ff8b1f) drop-shadow(0 0 22px #ff3817b8);
+  transform: scale(.12);
+}
+.library-fire-scene.is-impacting .roof-impact { animation: roofImpactPulse .48s ease-out infinite; }
+.roof-impact b {
+  position: absolute;
+  inset: 19%;
+  border: 2px solid #fff3a8;
+  border-radius: 50%;
+  box-shadow: 0 0 7px #ff8f25;
+  animation: impactRing .62s ease-out infinite;
+}
+.roof-impact i {
+  --angle: 0deg;
+  position: absolute;
+  left: 48%;
+  top: 48%;
+  width: 6%;
+  aspect-ratio: 1 / 2.6;
+  border-radius: 50%;
+  background: #fff4a5;
+  box-shadow: 0 0 4px #ff7a1c;
+  transform-origin: 50% 240%;
+  animation: impactSpark .72s ease-out infinite;
+}
+.roof-impact i:nth-of-type(1) { --angle: -82deg; animation-delay: -.1s; }
+.roof-impact i:nth-of-type(2) { --angle: -48deg; animation-delay: -.34s; }
+.roof-impact i:nth-of-type(3) { --angle: -14deg; animation-delay: -.51s; }
+.roof-impact i:nth-of-type(4) { --angle: 22deg; animation-delay: -.27s; }
+.roof-impact i:nth-of-type(5) { --angle: 55deg; animation-delay: -.62s; }
+.roof-impact i:nth-of-type(6) { --angle: 91deg; animation-delay: -.43s; }
+.house-embers {
+  position: absolute;
+  z-index: 9;
+  inset: -70% -18% 0;
+}
+.house-embers i {
+  --drift-x: 12px;
+  --duration: 2.1s;
+  --delay: 0s;
+  position: absolute;
   left: 50%;
-  bottom: 18%;
+  bottom: 28%;
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: #fff4a1;
-  box-shadow: 0 0 4px #ffc221, 0 0 8px #ff5217;
+  background: #fff0a1;
+  box-shadow: 0 0 4px #ffc427, 0 0 8px #ff4f17;
   opacity: 0;
-  animation: roofEmber 1.8s ease-out infinite;
 }
-.library-roof-fire i:nth-of-type(1) { left: 26%; animation-delay: -.2s; }
-.library-roof-fire i:nth-of-type(2) { left: 39%; animation-delay: -.74s; scale: .72; }
-.library-roof-fire i:nth-of-type(3) { left: 55%; animation-delay: -1.3s; scale: 1.2; }
-.library-roof-fire i:nth-of-type(4) { left: 69%; animation-delay: -.96s; scale: .82; }
-.library-roof-fire i:nth-of-type(5) { left: 78%; animation-delay: -1.58s; scale: .64; }
-@keyframes roofFireLife {
-  0% { opacity: 0; transform: translateY(12%) scale(.18); }
-  3% { opacity: 1; transform: translateY(-2%) scale(1.14); }
-  7%, 76% { opacity: 1; transform: translateY(0) scale(1); }
-  88% { opacity: .62; transform: translateY(5%) scale(.86); }
-  100% { opacity: 0; transform: translateY(12%) scale(.5); }
+.house-embers i:nth-child(1) { left: 18%; --drift-x: -21px; --duration: 2.4s; --delay: -.2s; }
+.house-embers i:nth-child(2) { left: 27%; --drift-x: 14px; --duration: 1.7s; --delay: -.8s; scale: .7; }
+.house-embers i:nth-child(3) { left: 36%; --drift-x: -8px; --duration: 2.8s; --delay: -1.4s; scale: 1.2; }
+.house-embers i:nth-child(4) { left: 43%; --drift-x: 24px; --duration: 2.2s; --delay: -1.1s; }
+.house-embers i:nth-child(5) { left: 51%; --drift-x: -19px; --duration: 1.9s; --delay: -.5s; scale: .65; }
+.house-embers i:nth-child(6) { left: 58%; --drift-x: 9px; --duration: 2.6s; --delay: -1.8s; }
+.house-embers i:nth-child(7) { left: 65%; --drift-x: 28px; --duration: 2.1s; --delay: -1.3s; scale: 1.3; }
+.house-embers i:nth-child(8) { left: 72%; --drift-x: -14px; --duration: 2.7s; --delay: -.9s; }
+.house-embers i:nth-child(9) { left: 79%; --drift-x: 17px; --duration: 1.8s; --delay: -1.6s; scale: .75; }
+.house-embers i:nth-child(10) { left: 33%; --drift-x: -27px; --duration: 2.5s; --delay: -2.1s; }
+.house-embers i:nth-child(11) { left: 48%; --drift-x: 31px; --duration: 2.9s; --delay: -2.4s; scale: .55; }
+.house-embers i:nth-child(12) { left: 69%; --drift-x: -23px; --duration: 2.3s; --delay: -2.2s; }
+.library-fire-scene.is-burning .house-embers i { animation: houseEmberRise var(--duration) ease-out calc(var(--delay) + .7s) infinite; }
+@keyframes houseFireLife {
+  0%, 93% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes structureFlameLife {
+  0% { opacity: 0; transform: translateY(16%) scale(.16) rotate(var(--tilt)); }
+  4% { opacity: 1; transform: translateY(-2%) scale(1.12) rotate(var(--tilt)); }
+  9%, 70% { opacity: 1; transform: translateY(0) scale(1) rotate(var(--tilt)); }
+  82% { opacity: .8; transform: translateY(3%) scale(.92) rotate(var(--tilt)); }
+  100% { opacity: 0; transform: translateY(14%) scale(.46) rotate(var(--tilt)); }
 }
 @keyframes roofFireFrames {
   0%, 16.65% { background-position: 0 0; }
@@ -300,11 +525,44 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   66.66%, 83.31% { background-position: 80% 0; }
   83.33%, 100% { background-position: 100% 0; }
 }
-@keyframes roofGlow { to { opacity: .66; transform: scale(1.16, .9); } }
-@keyframes roofEmber {
-  0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0); }
-  16% { opacity: 1; }
-  100% { opacity: 0; transform: translate3d(22px, -118px, 0) rotate(210deg); }
+@keyframes roofChar {
+  0% { opacity: 0; filter: brightness(1.5) blur(.2px); }
+  18%, 72% { opacity: .72; filter: brightness(1) blur(.25px); }
+  100% { opacity: .9; filter: brightness(.68) blur(.4px); }
+}
+@keyframes facadeBurn {
+  0% { opacity: 0; transform: scale(.6); }
+  12%, 74% { opacity: .9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(.82); }
+}
+@keyframes facadeFlicker { to { filter: blur(7px) brightness(1.32); transform: scale(1.04, .96); } }
+@keyframes houseSmokeRise {
+  0% { opacity: 0; transform: translate3d(0, 18%, 0) scale(.35); }
+  18% { opacity: .74; }
+  62% { opacity: .52; }
+  100% { opacity: 0; transform: translate3d(var(--drift), -105%, 0) scale(1.35); }
+}
+@keyframes windowIgnite {
+  0% { opacity: 0; transform: scale(.2); }
+  8%, 72% { opacity: .95; transform: scale(1); }
+  88% { opacity: .66; }
+  100% { opacity: 0; transform: scale(.58); }
+}
+@keyframes windowFlicker { to { filter: brightness(1.35) saturate(1.2); box-shadow: 0 0 8px #fff1a5, 0 0 18px #ff3d17d1; } }
+@keyframes roofImpactPulse {
+  0% { opacity: .25; transform: scale(.38) rotate(0); }
+  42% { opacity: 1; transform: scale(1.18) rotate(7deg); }
+  100% { opacity: .38; transform: scale(.72) rotate(-5deg); }
+}
+@keyframes impactRing { from { opacity: 1; transform: scale(.2); } to { opacity: 0; transform: scale(2.8); } }
+@keyframes impactSpark {
+  from { opacity: 1; transform: rotate(var(--angle)) translateY(-6px) scaleY(.55); }
+  to { opacity: 0; transform: rotate(var(--angle)) translateY(-38px) scaleY(1.4); }
+}
+@keyframes houseEmberRise {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0) scale(.4); }
+  13% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(var(--drift-x), -145px, 0) rotate(260deg) scale(1.15); }
 }
 
 .player {
@@ -487,8 +745,10 @@ html[data-period="night"] .sunwash { opacity: 0; animation: none; }
 html[data-period="night"] .breeze i { background: linear-gradient(135deg, #6ba9a2, #1d5560); box-shadow: 0 0 4px #8ee7e655; }
 html[data-period="night"] .flock { color: #8db5c3; filter: drop-shadow(0 0 2px #061327); opacity: .48; }
 html[data-period="night"] .dragon-event { filter: drop-shadow(0 2px 3px #020713) drop-shadow(0 0 4px #8fbaff77); }
-html[data-period="night"] .dragon-flame { filter: drop-shadow(0 0 7px #ffb02c) drop-shadow(0 0 18px #ff471dcc); }
-html[data-period="night"] .library-roof-fire { filter: drop-shadow(0 0 10px #ff8d21) drop-shadow(0 0 26px #ff3717ad); }
+html[data-period="night"] .dragon-breath { filter: drop-shadow(0 0 7px #ffb02c) drop-shadow(0 0 18px #ff471dcc); }
+html[data-period="night"] .library-fire-scene { filter: drop-shadow(0 0 10px #ff8d21) drop-shadow(0 0 27px #ff3717ad); }
+html[data-period="night"] .house-smoke { opacity: .98; filter: brightness(.78) contrast(1.08); }
+html[data-period="night"] .facade-heat { mix-blend-mode: plus-lighter; }
 html[data-period="night"] .hotspot::after {
   background: linear-gradient(180deg, #3c5267 0 15%, #26394b 16% 100%);
   border-color: #101821;
@@ -662,8 +922,8 @@ kbd {
   .enter { bottom: max(7.5rem, calc(6.5rem + env(safe-area-inset-bottom))); font-size: .78rem; }
   .flock-two { display: none; }
   .flock-one { opacity: .55; }
-  .dragon-event { width: 13.5%; }
-  .dragon-flame { filter: none; }
+  .dragon-event { width: 12%; }
+  .dragon-breath { filter: none; }
 }
 
 @media (max-width: 380px) {

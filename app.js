@@ -6,7 +6,9 @@
   const H = 532;
   const SPEED = 168;
   const WALK_FRAME_DISTANCE = 19;
-  const DRAGON_IGNITION_DELAY = 5050;
+  const DRAGON_IMPACT_DELAY = 4230;
+  const DRAGON_IGNITION_DELAY = 4920;
+  const DRAGON_IMPACT_END_DELAY = 6250;
   const START = { x: 577, y: 516 };
   const TARGET = { x: 770, y: 456 };
   const ZONE = { x1: 738, x2: 798, y1: 420, y2: 468 };
@@ -35,6 +37,8 @@
     last: performance.now(),
     timer: 0,
     dragonTimer: 0,
+    dragonImpactTimer: 0,
+    dragonImpactEndTimer: 0,
     dragonIgnitionTimer: 0,
     walkFrame: 0,
     walkDistance: 0,
@@ -253,9 +257,27 @@
       scheduleDragon();
       return;
     }
+    clearTimeout(state.dragonImpactTimer);
+    clearTimeout(state.dragonImpactEndTimer);
     clearTimeout(state.dragonIgnitionTimer);
+    libraryRoofFire.classList.remove('is-impacting');
+    dragonEvent.classList.remove('is-active');
+    void dragonEvent.offsetWidth;
     dragonEvent.classList.add('is-active');
+    state.dragonImpactTimer = setTimeout(startRoofImpact, DRAGON_IMPACT_DELAY);
     state.dragonIgnitionTimer = setTimeout(igniteLibraryRoof, DRAGON_IGNITION_DELAY);
+    state.dragonImpactEndTimer = setTimeout(stopRoofImpact, DRAGON_IMPACT_END_DELAY);
+  }
+
+  function startRoofImpact() {
+    if (reduceMotion.matches || document.hidden || state.entering) return;
+    libraryRoofFire.classList.remove('is-impacting');
+    void libraryRoofFire.offsetWidth;
+    libraryRoofFire.classList.add('is-impacting');
+  }
+
+  function stopRoofImpact() {
+    libraryRoofFire.classList.remove('is-impacting');
   }
 
   function igniteLibraryRoof() {
@@ -268,27 +290,34 @@
   dragonEvent.addEventListener('animationend', (event) => {
     if (event.target !== dragonEvent || event.animationName !== 'dragonFlight') return;
     dragonEvent.classList.remove('is-active');
+    stopRoofImpact();
     scheduleDragon();
   });
 
   libraryRoofFire.addEventListener('animationend', (event) => {
-    if (event.target !== libraryRoofFire || event.animationName !== 'roofFireLife') return;
+    if (event.target !== libraryRoofFire || event.animationName !== 'houseFireLife') return;
     libraryRoofFire.classList.remove('is-burning');
   });
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       clearTimeout(state.dragonTimer);
+      clearTimeout(state.dragonImpactTimer);
+      clearTimeout(state.dragonImpactEndTimer);
       clearTimeout(state.dragonIgnitionTimer);
       dragonEvent.classList.remove('is-active');
+      libraryRoofFire.classList.remove('is-impacting');
       libraryRoofFire.classList.remove('is-burning');
     } else {
       scheduleDragon(true);
     }
   });
   reduceMotion.addEventListener?.('change', () => {
+    clearTimeout(state.dragonImpactTimer);
+    clearTimeout(state.dragonImpactEndTimer);
     clearTimeout(state.dragonIgnitionTimer);
     dragonEvent.classList.remove('is-active');
+    libraryRoofFire.classList.remove('is-impacting');
     libraryRoofFire.classList.remove('is-burning');
     scheduleDragon(true);
   });
@@ -362,5 +391,5 @@
     note('마을을 불러오지 못했어요. 페이지를 새로고침해 주세요.', 6000);
   });
 
-  window.ASKI_EFFECTS = Object.freeze({ triggerDragon, igniteLibraryRoof });
+  window.ASKI_EFFECTS = Object.freeze({ triggerDragon, startRoofImpact, igniteLibraryRoof });
 })();
