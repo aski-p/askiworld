@@ -6,69 +6,109 @@ const ready = async (page) => {
   await page.waitForFunction(() => document.querySelector('#app')?.getAttribute('aria-busy') === 'false');
 };
 
-test('Library fire has no leaking facade glow and fountain water flows over the painted streams', async ({ page }) => {
+const transparent = 'rgba(0, 0, 0, 0)';
+
+test('Library fire contains no geometric overlay artifacts', async ({ page }) => {
+  await ready(page);
+  for (const selector of [
+    '.facade-heat',
+    '.door-heat',
+    '.roof-char',
+    '.window-lower-left',
+    '.window-lower-right',
+  ]) {
+    await expect(page.locator(selector), selector).toHaveCount(0);
+  }
+  const windowFlameContent = await page.locator('.window-blaze').first()
+    .evaluate((element) => getComputedStyle(element, '::after').content);
+  expect(windowFlameContent).toBe('none');
+});
+
+test('fountain shimmer follows the three painted water streams exactly', async ({ page }) => {
   await page.setViewportSize({ width: 1184, height: 532 });
   await ready(page);
 
-  await expect(page.locator('.facade-heat')).toHaveCount(0);
-  await expect(page.locator('.door-heat')).toHaveCount(0);
-  await expect(page.locator('.window-lower-left, .window-lower-right')).toHaveCount(0);
-  const windowFlameContent = await page.locator('.window-blaze').first().evaluate((element) => getComputedStyle(element, '::after').content);
-  expect(windowFlameContent).toBe('none');
   const fountain = page.locator('.fountain-water');
   await expect(fountain).toHaveCount(1);
-  await expect(fountain.locator('.water-stream')).toHaveCount(3);
-  await expect(fountain.locator('.water-ripple')).toHaveCount(2);
+  await expect(fountain.locator('.water-glint')).toHaveCount(3);
+  await expect(fountain.locator('.water-splash')).toHaveCount(3);
+  await expect(fountain.locator('.water-ripple, .water-channels, .water-stream')).toHaveCount(0);
 
   const effect = await fountain.evaluate((element) => {
     const rect = element.getBoundingClientRect();
-    const stream = getComputedStyle(element.querySelector('.water-stream'));
-    const ripple = getComputedStyle(element.querySelector('.water-ripple'));
-    const own = getComputedStyle(element);
+    const svg = element.querySelector('svg');
+    const viewBox = svg.viewBox.baseVal;
+    const toScene = (point) => ({
+      x: rect.left + ((point.x - viewBox.x) / viewBox.width) * rect.width,
+      y: rect.top + ((point.y - viewBox.y) / viewBox.height) * rect.height,
+    });
+    const paths = [...element.querySelectorAll('.water-glint')].map((path) => ({
+      start: toScene(path.getPointAtLength(0)),
+      end: toScene(path.getPointAtLength(path.getTotalLength())),
+    }));
+    const glint = getComputedStyle(element.querySelector('.water-glint'));
+    const splashSizes = [...element.querySelectorAll('.water-splash')]
+      .map((ellipse) => Number(ellipse.getAttribute('rx')));
     return {
-      rect: { left: rect.left, top: rect.top, width: rect.width, height: rect.height },
-      pointerEvents: own.pointerEvents,
-      streamAnimation: stream.animationName,
-      streamOpacity: Number(stream.opacity),
-      streamWidth: Number.parseFloat(stream.strokeWidth),
-      rippleAnimation: ripple.animationName,
+      paths,
+      splashSizes,
+      pointerEvents: getComputedStyle(element).pointerEvents,
+      filter: getComputedStyle(element).filter,
+      animation: glint.animationName,
+      opacity: Number(glint.opacity),
+      strokeWidth: Number.parseFloat(glint.strokeWidth),
     };
   });
 
+  const expected = [
+    { start: { x: 330, y: 390 }, end: { x: 314, y: 438 } },
+    { start: { x: 358, y: 415 }, end: { x: 347, y: 454 } },
+    { start: { x: 399, y: 390 }, end: { x: 420, y: 438 } },
+  ];
+  for (let index = 0; index < expected.length; index += 1) {
+    for (const edge of ['start', 'end']) {
+      expect(effect.paths[index][edge].x, `${index} ${edge} x`).toBeCloseTo(expected[index][edge].x, 0);
+      expect(effect.paths[index][edge].y, `${index} ${edge} y`).toBeCloseTo(expected[index][edge].y, 0);
+    }
+  }
   expect(effect.pointerEvents).toBe('none');
-  expect(effect.streamAnimation).toContain('fountainFlow');
-  expect(effect.streamOpacity).toBeLessThanOrEqual(0.68);
-  expect(effect.streamWidth).toBeLessThanOrEqual(1.6);
-  expect(effect.rippleAnimation).toContain('fountainRipple');
-  expect(effect.rect.left).toBeGreaterThan(230);
-  expect(effect.rect.left).toBeLessThan(300);
-  expect(effect.rect.top).toBeGreaterThan(320);
-  expect(effect.rect.top).toBeLessThan(370);
+  expect(effect.filter).toBe('none');
+  expect(effect.animation).toContain('fountainGlint');
+  expect(effect.opacity).toBeLessThanOrEqual(0.5);
+  expect(effect.strokeWidth).toBeLessThanOrEqual(1);
+  expect(Math.max(...effect.splashSizes)).toBeLessThanOrEqual(10);
+});
 
-  await page.locator('.library').hover();
-  await page.waitForTimeout(250);
-  const libraryHighlight = await page.locator('.library').evaluate((element) => {
-    const highlight = getComputedStyle(element, '::before');
-    const label = getComputedStyle(element, '::after');
-    return {
-      borderColor: highlight.borderColor,
-      backgroundColor: highlight.backgroundColor,
-      boxShadow: highlight.boxShadow,
-      labelFilter: label.filter,
-    };
-  });
-  expect(libraryHighlight.borderColor).toBe('rgba(0, 0, 0, 0)');
-  expect(libraryHighlight.backgroundColor).toBe('rgba(0, 0, 0, 0)');
-  expect(libraryHighlight.boxShadow).toBe('none');
-  expect(libraryHighlight.labelFilter).not.toBe('none');
+test('locked building labels never draw giant hover rectangles', async ({ page }) => {
+  await page.setViewportSize({ width: 1184, height: 532 });
+  await ready(page);
+  for (const selector of ['.studio', '.library', '.windmill']) {
+    await page.locator(selector).hover();
+    await page.waitForTimeout(250);
+    const visual = await page.locator(selector).evaluate((element) => {
+      const highlight = getComputedStyle(element, '::before');
+      const label = getComputedStyle(element, '::after');
+      return {
+        border: highlight.borderColor,
+        background: highlight.backgroundColor,
+        shadow: highlight.boxShadow,
+        labelFilter: label.filter,
+      };
+    });
+    expect(visual.border, selector).toBe(transparent);
+    expect(visual.background, selector).toBe(transparent);
+    expect(visual.shadow, selector).toBe('none');
+    expect(visual.labelFilter, selector).not.toBe('none');
+  }
 });
 
 test('fountain respects reduced-motion preference', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await ready(page);
   const animations = await page.locator('.fountain-water').evaluate((element) => ({
-    stream: getComputedStyle(element.querySelector('.water-stream')).animationName,
-    ripple: getComputedStyle(element.querySelector('.water-ripple')).animationName,
+    glint: getComputedStyle(element.querySelector('.water-glint')).animationName,
+    droplet: getComputedStyle(element.querySelector('.water-droplet')).animationName,
+    splash: getComputedStyle(element.querySelector('.water-splash')).animationName,
   }));
-  expect(animations).toEqual({ stream: 'none', ripple: 'none' });
+  expect(animations).toEqual({ glint: 'none', droplet: 'none', splash: 'none' });
 });

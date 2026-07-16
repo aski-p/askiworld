@@ -337,23 +337,6 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
 .library-fire-scene.is-burning .roof-flame {
   animation: structureFlameLife 18.4s ease-out var(--delay) both, roofFireFrames var(--speed) steps(1, end) infinite;
 }
-.roof-char {
-  position: absolute;
-  z-index: 2;
-  left: 1%;
-  top: 4%;
-  width: 98%;
-  height: 58%;
-  opacity: 0;
-  clip-path: polygon(2% 76%, 33% 10%, 45% 0, 58% 15%, 68% 5%, 100% 51%, 82% 100%, 48% 68%, 25% 100%);
-  background:
-    radial-gradient(circle at 56% 29%, #ff6d1d9c 0 2%, #32130be6 12%, transparent 31%),
-    repeating-linear-gradient(112deg, #100907e8 0 3px, #742310c7 4px 6px, transparent 7px 15px),
-    linear-gradient(145deg, #1a0c08f0, #050303d9);
-  mix-blend-mode: multiply;
-  filter: blur(.25px);
-}
-.library-fire-scene.is-burning .roof-char { animation: roofChar 20s ease-out .35s both; }
 .house-smoke {
   position: absolute;
   z-index: 4;
@@ -493,11 +476,6 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   66.66%, 83.31% { background-position: 80% 0; }
   83.33%, 100% { background-position: 100% 0; }
 }
-@keyframes roofChar {
-  0% { opacity: 0; filter: brightness(1.5) blur(.2px); }
-  18%, 72% { opacity: .72; filter: brightness(1) blur(.25px); }
-  100% { opacity: .9; filter: brightness(.68) blur(.4px); }
-}
 @keyframes houseSmokeRise {
   0% { opacity: 0; transform: translate3d(0, 18%, 0) scale(.35); }
   18% { opacity: .74; }
@@ -535,55 +513,56 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   width: 17.3%;
   height: 27%;
   pointer-events: none;
-  opacity: .82;
-  filter: drop-shadow(0 0 1px #8eeaff66);
+  opacity: 1;
+  filter: none;
   contain: layout style;
 }
 .fountain-water svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.water-channels,
-.water-highlights { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-.water-channels { stroke: #1685b55c; stroke-width: 4; }
-.water-stream {
+.water-glint {
   fill: none;
-  stroke: #c7f7ff;
-  stroke-width: 1.5;
+  stroke: url(#water-glint-gradient);
+  stroke-width: .85;
   stroke-linecap: round;
-  stroke-dasharray: 5 13;
-  opacity: .62;
-  animation: fountainFlow .62s linear infinite;
+  stroke-linejoin: round;
+  stroke-dasharray: 1.2 8.8;
+  opacity: .46;
+  animation: fountainGlint .68s linear infinite;
 }
-.water-stream-center { animation-delay: -.21s; }
-.water-stream-right { animation-delay: -.39s; }
-.water-droplets circle {
-  fill: #d9fbff;
-  stroke: #4dbde2;
-  stroke-width: 1;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: fountainDrop .88s ease-in infinite;
-}
-.water-droplets circle:nth-child(2) { animation-delay: -.22s; }
-.water-droplets circle:nth-child(3) { animation-delay: -.47s; }
-.water-droplets circle:nth-child(4) { animation-delay: -.68s; }
-.water-ripple {
-  fill: none;
-  stroke: #9eeeff;
-  stroke-width: 2;
+.water-glint-front { animation-delay: -.23s; }
+.water-glint-right { animation-delay: -.41s; }
+.water-droplet {
+  --drift-x: 0px;
+  fill: #d8f8ff;
   opacity: 0;
   transform-box: fill-box;
   transform-origin: center;
-  animation: fountainRipple 1.65s ease-out infinite;
+  animation: fountainDroplet .92s ease-in infinite;
 }
-.water-ripple-front { animation-delay: -.82s; }
-@keyframes fountainFlow { to { stroke-dashoffset: -32; } }
-@keyframes fountainDrop {
-  0% { opacity: 0; transform: translateY(-5px) scale(.45); }
-  28% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(11px) scale(1.12); }
+.water-droplet:nth-child(2) { --drift-x: 1.4px; animation-delay: -.31s; }
+.water-droplet:nth-child(3) { --drift-x: -1px; animation-delay: -.53s; }
+.water-droplet:nth-child(4) { --drift-x: 1.1px; animation-delay: -.76s; }
+.water-droplet:nth-child(5) { --drift-x: -1.3px; animation-delay: -.44s; }
+.water-droplet:nth-child(6) { --drift-x: 1px; animation-delay: -.68s; }
+.water-splash {
+  fill: none;
+  stroke: #bceefa;
+  stroke-width: .65;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: fountainSplash 1.3s ease-out infinite;
 }
-@keyframes fountainRipple {
-  0% { opacity: .75; transform: scale(.42); }
-  100% { opacity: 0; transform: scale(1.16); }
+.water-splash-front { animation-delay: -.43s; }
+.water-splash-right { animation-delay: -.81s; }
+@keyframes fountainGlint { to { stroke-dashoffset: -20; } }
+@keyframes fountainDroplet {
+  0% { opacity: 0; transform: translate3d(0, -2px, 0) scale(.55); }
+  24% { opacity: .7; }
+  100% { opacity: 0; transform: translate3d(var(--drift-x), 4px, 0) scale(.85); }
+}
+@keyframes fountainSplash {
+  0% { opacity: .38; transform: scale(.68); }
+  100% { opacity: 0; transform: scale(1.12); }
 }
 
 .player {
@@ -695,8 +674,8 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   background: #ffd57522;
   box-shadow: 0 0 30px #ffb83e66;
 }
-.library:hover::before,
-.library:focus-visible::before {
+.hotspot.locked:hover::before,
+.hotspot.locked:focus-visible::before {
   border-color: transparent;
   background: transparent;
   box-shadow: none;
@@ -964,9 +943,9 @@ kbd {
 @media (prefers-reduced-motion: reduce) {
   .sky-life,
   .breeze { display: none; }
-  .water-stream,
-  .water-droplets circle,
-  .water-ripple { animation: none !important; }
+  .water-glint,
+  .water-droplet,
+  .water-splash { animation: none !important; }
   *, *::before, *::after {
     animation-duration: 1ms !important;
     transition-duration: 1ms !important;
