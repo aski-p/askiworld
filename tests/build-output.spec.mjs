@@ -45,8 +45,9 @@ test('production build emits only the fullscreen static application', async () =
   expect(html).toContain('class="library-fire-scene"');
   expect(html).toContain('class="dragon-breath"');
   const css = await fs.readFile('dist/styles.css', 'utf8');
-  expect(css).toContain('assets/dragon-breath.webp?v=11');
-  expect(css).toContain('assets/house-flame.webp?v=11');
+  expect(css).toContain('assets/dragon-breath.webp?v=12');
+  expect(css).toContain('assets/house-flame.webp?v=12');
+  expect(css).not.toContain('background-image: url("./assets/roof-fire.webp');
   expect(css).toContain('@keyframes houseFireLife');
 
   const vercel = JSON.parse(await fs.readFile('vercel.json', 'utf8'));

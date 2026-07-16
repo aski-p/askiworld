@@ -181,7 +181,7 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   z-index: 2;
   inset: 0;
   display: block;
-  background: url("./assets/dragon-flight.webp?v=11") 0 0 / 300% 100% no-repeat;
+  background: url("./assets/dragon-flight.webp?v=12") 0 0 / 300% 100% no-repeat;
   transform-origin: 58% 56%;
 }
 .dragon-event.is-active .dragon-sprite {
@@ -219,7 +219,7 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   position: absolute;
   z-index: 2;
   inset: 0;
-  background: url("./assets/dragon-breath.webp?v=11") 0 0 / 600% 100% no-repeat;
+  background: url("./assets/dragon-breath.webp?v=12") 0 0 / 600% 100% no-repeat;
   filter: saturate(1.08) contrast(1.06) drop-shadow(0 0 3px #ffe46d) drop-shadow(0 0 9px #ff4a16cc);
   will-change: background-position;
 }
@@ -317,7 +317,7 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   z-index: 5;
   aspect-ratio: 181 / 140;
   opacity: 0;
-  background: url("./assets/house-flame.webp?v=11") 0 0 / 600% 100% no-repeat;
+  background: url("./assets/house-flame.webp?v=12") 0 0 / 600% 100% no-repeat;
   filter: saturate(1.12) contrast(1.05) drop-shadow(0 0 3px #ffe26a) drop-shadow(0 0 9px #f44a16d9);
   transform-origin: 50% 100%;
   will-change: background-position, transform, opacity;
@@ -325,13 +325,11 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
 .roof-flame-main {
   --delay: .12s;
   --speed: .72s;
-  --tilt: -1deg;
-  left: 31%;
-  top: -60%;
-  width: 54%;
+  --tilt: 2deg;
+  left: 27%;
+  top: -2%;
+  width: 58%;
   z-index: 6;
-  aspect-ratio: 2 / 3;
-  background-image: url("./assets/roof-fire.webp?v=11");
 }
 .roof-flame-left { --delay: .58s; --speed: .83s; --tilt: -12deg; left: 0; top: 27%; width: 43%; }
 .roof-flame-right { --delay: .92s; --speed: .67s; --tilt: 8deg; left: 29%; top: 12%; width: 67%; }
