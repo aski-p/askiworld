@@ -181,7 +181,7 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   z-index: 2;
   inset: 0;
   display: block;
-  background: url("./assets/dragon-flight.webp?v=8") 0 0 / 300% 100% no-repeat;
+  background: url("./assets/dragon-flight.webp?v=9") 0 0 / 300% 100% no-repeat;
   animation: dragonFrames .72s linear infinite;
 }
 .dragon-flame {
@@ -222,74 +222,89 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
 .library-roof-fire {
   position: absolute;
   z-index: 6;
-  left: 45.5%;
-  top: 23.5%;
-  width: 7.2%;
-  height: 15.5%;
+  left: 44.45%;
+  top: 7.7%;
+  width: 9.6%;
+  aspect-ratio: 2 / 3;
   opacity: 0;
   pointer-events: none;
-  transform: scale(.25);
+  transform: translateY(12%) scale(.18);
   transform-origin: 50% 100%;
   will-change: transform, opacity;
 }
-.library-roof-fire.is-burning { animation: roofFireLife 14s ease-out both; }
+.library-roof-fire.is-burning { animation: roofFireLife 18s ease-out both; }
+.roof-fire-sprite {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  background: url("./assets/roof-fire.webp?v=9") 0 0 / 600% 100% no-repeat;
+  filter: saturate(1.1) contrast(1.035) drop-shadow(0 0 3px #ffcc45) drop-shadow(0 0 9px #f44a16cc);
+  animation: roofFireFrames .78s steps(1, end) infinite;
+  will-change: background-position;
+}
+.roof-scorch {
+  position: absolute;
+  z-index: 1;
+  left: 2%;
+  right: 2%;
+  bottom: 1%;
+  height: 14%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #fff29fe8 0 4%, #ff8a1ebd 18%, #8f1d0bd9 42%, #28100dd9 64%, transparent 74%);
+  filter: blur(1.4px);
+  transform: rotate(-2deg) scaleX(1.12);
+}
 .roof-fire-glow {
   position: absolute;
-  left: -42%;
-  right: -42%;
-  bottom: -15%;
-  height: 76%;
+  z-index: 2;
+  left: -55%;
+  right: -55%;
+  bottom: -9%;
+  height: 59%;
   border-radius: 50%;
-  background: radial-gradient(ellipse, #fff4a9c9 0 7%, #ff9d21a8 24%, #ff3c164f 48%, transparent 72%);
-  filter: blur(5px);
+  background: radial-gradient(ellipse, #fffbd6e8 0 4%, #ffd45fc7 12%, #ff791d9e 30%, #f22f174a 54%, transparent 72%);
+  filter: blur(7px);
   mix-blend-mode: screen;
-  animation: roofGlow .44s ease-in-out infinite alternate;
+  animation: roofGlow .36s ease-in-out infinite alternate;
 }
 .library-roof-fire i {
   position: absolute;
-  bottom: 10%;
-  width: 35%;
-  height: 72%;
-  border-radius: 52% 52% 48% 48%;
-  background: linear-gradient(180deg, #fff8b0 0 12%, #ffc02f 37%, #ff5b18 70%, #d9250b 100%);
-  clip-path: polygon(50% 0, 72% 24%, 95% 56%, 79% 100%, 18% 100%, 4% 58%, 28% 32%);
-  filter: drop-shadow(0 0 3px #ffb21e) drop-shadow(0 0 8px #f33a12b8);
-  transform-origin: 50% 100%;
-  animation: roofFlame .38s ease-in-out infinite alternate;
-}
-.library-roof-fire i:nth-of-type(1) { left: 6%; height: 58%; animation-delay: -.21s; }
-.library-roof-fire i:nth-of-type(2) { left: 33%; height: 86%; animation-duration: .46s; }
-.library-roof-fire i:nth-of-type(3) { right: 5%; height: 66%; animation-delay: -.33s; animation-duration: .41s; }
-.library-roof-fire b {
-  position: absolute;
-  left: 42%;
-  bottom: 62%;
-  width: 18%;
-  aspect-ratio: 1;
+  z-index: 4;
+  left: 50%;
+  bottom: 18%;
+  width: 3px;
+  height: 3px;
   border-radius: 50%;
-  background: #4a403b8c;
-  filter: blur(3px);
+  background: #fff4a1;
+  box-shadow: 0 0 4px #ffc221, 0 0 8px #ff5217;
   opacity: 0;
-  animation: roofSmoke 2.7s ease-out infinite;
+  animation: roofEmber 1.8s ease-out infinite;
 }
-.library-roof-fire b:nth-of-type(2) { left: 22%; animation-delay: -.9s; scale: .72; }
-.library-roof-fire b:nth-of-type(3) { left: 66%; animation-delay: -1.8s; scale: .88; }
+.library-roof-fire i:nth-of-type(1) { left: 26%; animation-delay: -.2s; }
+.library-roof-fire i:nth-of-type(2) { left: 39%; animation-delay: -.74s; scale: .72; }
+.library-roof-fire i:nth-of-type(3) { left: 55%; animation-delay: -1.3s; scale: 1.2; }
+.library-roof-fire i:nth-of-type(4) { left: 69%; animation-delay: -.96s; scale: .82; }
+.library-roof-fire i:nth-of-type(5) { left: 78%; animation-delay: -1.58s; scale: .64; }
 @keyframes roofFireLife {
-  0% { opacity: 0; transform: scale(.25); }
-  5% { opacity: 1; transform: scale(.92); }
-  12%, 62% { opacity: 1; transform: scale(1); }
-  83% { opacity: .58; transform: scale(.82); }
-  100% { opacity: 0; transform: scale(.45); }
+  0% { opacity: 0; transform: translateY(12%) scale(.18); }
+  3% { opacity: 1; transform: translateY(-2%) scale(1.14); }
+  7%, 76% { opacity: 1; transform: translateY(0) scale(1); }
+  88% { opacity: .62; transform: translateY(5%) scale(.86); }
+  100% { opacity: 0; transform: translateY(12%) scale(.5); }
 }
-@keyframes roofFlame {
-  from { transform: translateY(2%) rotate(-4deg) scale(.88, .92); }
-  to { transform: translateY(-4%) rotate(5deg) scale(1.08, 1.12); }
+@keyframes roofFireFrames {
+  0%, 16.65% { background-position: 0 0; }
+  16.67%, 33.31% { background-position: 20% 0; }
+  33.33%, 49.98% { background-position: 40% 0; }
+  50%, 66.64% { background-position: 60% 0; }
+  66.66%, 83.31% { background-position: 80% 0; }
+  83.33%, 100% { background-position: 100% 0; }
 }
-@keyframes roofGlow { to { opacity: .72; transform: scale(1.12, .92); } }
-@keyframes roofSmoke {
-  0% { opacity: 0; transform: translate3d(0, 0, 0) scale(.45); }
-  18% { opacity: .44; }
-  100% { opacity: 0; transform: translate3d(18px, -64px, 0) scale(1.8); }
+@keyframes roofGlow { to { opacity: .66; transform: scale(1.16, .9); } }
+@keyframes roofEmber {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0); }
+  16% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(22px, -118px, 0) rotate(210deg); }
 }
 
 .player {
@@ -324,6 +339,12 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   image-rendering: auto;
   backface-visibility: hidden;
   will-change: translate;
+}
+.player.facing-left .sprite-window,
+.player.facing-right .sprite-window {
+  width: 140.625%;
+  margin-left: -20.3125%;
+  aspect-ratio: 45 / 64;
 }
 .player.facing-right .sprite-window { transform: scaleX(-1); }
 .player span {

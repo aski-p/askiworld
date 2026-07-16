@@ -11,6 +11,7 @@ const PUBLIC_FILES = [
   'atlas.js',
   'favicon.svg',
   'assets/dragon-flight.webp',
+  'assets/roof-fire.webp',
   'assets/village.png',
   'assets/village-hd.webp',
   'assets/village-uhd.webp',

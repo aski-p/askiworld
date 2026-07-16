@@ -25,6 +25,7 @@ const PUBLIC_PATHS = new Set([
   '/atlas.js',
   '/favicon.svg',
   '/assets/dragon-flight.webp',
+  '/assets/roof-fire.webp',
   '/assets/village.png',
   '/assets/village-hd.webp',
   '/assets/village-uhd.webp',
