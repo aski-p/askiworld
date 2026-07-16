@@ -16,10 +16,12 @@
 <main class="board is-loading" id="app" aria-busy="true">
   <section class="world" id="world" tabindex="0" aria-label="직접 움직일 수 있는 ASKIWORLD 마을">
     <div class="scene" id="scene">
-      <img class="village" data-asset="village" alt="산과 숲으로 둘러싸인 카툰 마을과 Agent Office">
+      <img class="village" data-asset="village" alt="햇살과 산으로 둘러싸인 셀 셰이딩 판타지 마을과 Agent Office">
+      <div class="sunwash" aria-hidden="true"></div>
+      <div class="breeze" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <div class="door" aria-hidden="true"><i></i><b class="left"></b><b class="right"></b></div>
       <div class="player facing-up" id="player" aria-label="ASKIWORLD 여행자"><span></span><img id="sprite" data-asset="characterBack" alt=""></div>
-      <button class="hotspot office" id="office" aria-label="Agent Office. 누르면 캐릭터가 문으로 이동합니다"><em>Agent Office로 이동</em></button>
+      <button class="hotspot office" id="office" data-name="Agent Office" aria-label="Agent Office. 누르면 캐릭터가 문으로 이동합니다"><em>Agent Office로 이동</em></button>
       <button class="hotspot studio locked" data-name="Studio" aria-label="Studio, 준비 중"></button>
       <button class="hotspot library locked" data-name="Library" aria-label="Library, 준비 중"></button>
       <button class="hotspot windmill locked" data-name="Windmill" aria-label="Windmill, 준비 중"></button>
