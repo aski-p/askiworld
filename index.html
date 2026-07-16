@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#07191b">
+  <meta name="theme-color" content="#77bada">
   <meta name="description" content="캐릭터를 움직여 Agent Office 문으로 들어가는 전체 화면 ASKIWORLD">
   <meta property="og:title" content="ASKIWORLD — 마을을 탐험하세요">
   <meta property="og:description" content="캐릭터를 움직여 Agent Office 건물의 문을 열고 들어가세요.">
@@ -16,9 +16,27 @@
 <main class="board is-loading" id="app" aria-busy="true">
   <section class="world" id="world" tabindex="0" aria-label="직접 움직일 수 있는 ASKIWORLD 마을">
     <div class="scene" id="scene">
-      <img class="village" data-asset="village" alt="햇살과 산으로 둘러싸인 셀 셰이딩 판타지 마을과 Agent Office">
+      <img class="village" data-asset="village" decoding="async" fetchpriority="high" alt="산과 숲으로 둘러싸인 셀 셰이딩 판타지 마을과 Agent Office">
       <div class="sunwash" aria-hidden="true"></div>
       <div class="breeze" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="sky-life" aria-hidden="true">
+        <div class="flock flock-one"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="flock flock-two"><i></i><i></i><i></i><i></i></div>
+        <div class="dragon-event" id="dragonEvent">
+          <svg class="dragon" viewBox="0 0 180 90" focusable="false">
+            <path class="wing wing-back" d="M78 47C68 22 79 8 103 5 95 19 102 31 122 38 104 38 94 42 87 52Z"/>
+            <path class="tail" d="M57 58C35 66 20 63 6 52 23 57 30 48 43 46Z"/>
+            <path class="body" d="M42 48C58 37 79 38 95 48 108 56 124 54 137 45L154 49 139 58C122 68 107 68 91 61 75 55 60 59 48 63Z"/>
+            <path class="neck" d="M119 54C124 40 134 31 148 28L163 34 153 43 139 42 132 57Z"/>
+            <path class="head" d="M145 27 161 23 175 30 166 38 149 37 139 31Z"/>
+            <path class="horn" d="M148 27 151 16 158 25M160 25 169 17 167 29"/>
+            <path class="wing wing-front" d="M84 51C68 27 52 19 31 20 47 31 47 45 39 59 58 46 69 49 87 62Z"/>
+            <path class="leg" d="M77 59 70 76 61 78M104 62 108 78 118 80"/>
+            <circle class="eye" cx="163" cy="30" r="2.4"/>
+          </svg>
+          <span class="dragon-flame"></span>
+        </div>
+      </div>
       <div class="door" aria-hidden="true"><i></i><b class="left"></b><b class="right"></b></div>
       <div class="player facing-up" id="player" aria-label="ASKIWORLD 여행자"><span></span><img id="sprite" data-asset="characterBack" alt=""></div>
       <button class="hotspot office" id="office" data-name="Agent Office" aria-label="Agent Office. 누르면 캐릭터가 문으로 이동합니다"><em>Agent Office로 이동</em></button>

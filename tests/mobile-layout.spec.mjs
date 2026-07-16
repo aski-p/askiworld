@@ -99,16 +99,22 @@ test('desktop also shows only a fullscreen playable village', async ({ page }) =
   await expect(page.locator('.pad')).toBeHidden();
 });
 
-test('large desktop selects the AI-enhanced HD village source', async ({ page }) => {
+test('large desktop selects the sharp UHD source for the active period', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
   await ready(page);
-  const currentPath = await page.locator('[data-asset="village"]').evaluate((element) => new URL(element.currentSrc).pathname);
-  expect(currentPath).toBe('/assets/village-hd.webp');
+  const selected = await page.locator('[data-asset="village"]').evaluate((element) => ({
+    path: new URL(element.currentSrc).pathname,
+    period: document.documentElement.dataset.period,
+  }));
+  expect(selected.path).toBe(selected.period === 'night' ? '/assets/village-night-uhd.webp' : '/assets/village-uhd.webp');
 });
 
-test('4K desktop selects the AI-enhanced UHD village source', async ({ page }) => {
+test('4K desktop selects the UHD source for the active period', async ({ page }) => {
   await page.setViewportSize({ width: 3840, height: 2160 });
   await ready(page);
-  const currentPath = await page.locator('[data-asset="village"]').evaluate((element) => new URL(element.currentSrc).pathname);
-  expect(currentPath).toBe('/assets/village-uhd.webp');
+  const selected = await page.locator('[data-asset="village"]').evaluate((element) => ({
+    path: new URL(element.currentSrc).pathname,
+    period: document.documentElement.dataset.period,
+  }));
+  expect(selected.path).toBe(selected.period === 'night' ? '/assets/village-night-uhd.webp' : '/assets/village-uhd.webp');
 });

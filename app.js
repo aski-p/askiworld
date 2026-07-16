@@ -16,7 +16,9 @@
   const enter = document.getElementById('enter');
   const toast = document.getElementById('toast');
   const live = document.getElementById('live');
+  const dragonEvent = document.getElementById('dragonEvent');
   const pad = [...document.querySelectorAll('[data-move]')];
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
   const state = {
     x: START.x,
@@ -29,6 +31,7 @@
     entering: false,
     last: performance.now(),
     timer: 0,
+    dragonTimer: 0,
   };
 
   let sprites = {};
@@ -215,6 +218,41 @@
     requestAnimationFrame(frame);
   }
 
+  function scheduleDragon(initial = false) {
+    clearTimeout(state.dragonTimer);
+    if (reduceMotion.matches || document.hidden) return;
+    const minimum = initial ? 6000 : 22000;
+    const spread = initial ? 6000 : 23000;
+    state.dragonTimer = setTimeout(triggerDragon, minimum + Math.random() * spread);
+  }
+
+  function triggerDragon() {
+    if (reduceMotion.matches || document.hidden || state.entering) {
+      scheduleDragon();
+      return;
+    }
+    dragonEvent.classList.add('is-active');
+  }
+
+  dragonEvent.addEventListener('animationend', (event) => {
+    if (event.target !== dragonEvent || event.animationName !== 'dragonFlight') return;
+    dragonEvent.classList.remove('is-active');
+    scheduleDragon();
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      clearTimeout(state.dragonTimer);
+      dragonEvent.classList.remove('is-active');
+    } else {
+      scheduleDragon(true);
+    }
+  });
+  reduceMotion.addEventListener?.('change', () => {
+    dragonEvent.classList.remove('is-active');
+    scheduleDragon(true);
+  });
+
   addEventListener('keydown', (event) => {
     const key = event.key.toLowerCase();
     if (['w', 'a', 's', 'd', 'arrowleft', 'arrowright', 'arrowup', 'arrowdown'].includes(key) && state.ready) {
@@ -277,8 +315,11 @@
     sprite.src = assets.characterBack;
     render();
     world.focus({ preventScroll: true });
+    scheduleDragon(true);
   }).catch((error) => {
     console.error('ASKIWORLD interaction disabled because assets failed to load.', error);
     note('마을을 불러오지 못했어요. 페이지를 새로고침해 주세요.', 6000);
   });
+
+  window.ASKI_EFFECTS = Object.freeze({ triggerDragon });
 })();
