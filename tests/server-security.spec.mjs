@@ -84,7 +84,7 @@ test('active UHD village failure keeps large-screen gameplay disabled', async ({
   });
   const page = await context.newPage();
   let intercepted = false;
-  await page.route(/\/village(?:-night)?-uhd\.webp$/, (route) => {
+  await page.route(/\/village(?:-night)?-uhd\.webp(?:\?[^#]*)?$/, (route) => {
     intercepted = true;
     return route.abort('failed');
   });
@@ -116,7 +116,7 @@ test('each required image failure keeps the game disabled and shows recovery UI'
       baseURL: 'http://127.0.0.1:4187',
       viewport: { width: 600, height: 800 },
     });
-    await page.route(`**/${asset}`, (route) => route.abort('failed'));
+    await page.route(new RegExp(`/${asset.replaceAll('.', '\\.')}(?:\\?[^#]*)?$`), (route) => route.abort('failed'));
     await page.goto('/');
     await page.waitForFunction(() => document.querySelector('#app')?.getAttribute('aria-busy') === 'false');
 
@@ -139,7 +139,7 @@ test('each required image failure keeps the game disabled and shows recovery UI'
 });
 
 test('selected village failure keeps the game disabled and shows recovery UI', async ({ page }) => {
-  await page.route(/\/village(?:-night)?(?:-hd|-uhd)?\.(?:png|webp)$/, (route) => route.abort('failed'));
+  await page.route(/\/village(?:-night)?(?:-hd|-uhd)?\.(?:png|webp)(?:\?[^#]*)?$/, (route) => route.abort('failed'));
   await page.goto('/');
   await page.waitForFunction(() => document.querySelector('#app')?.getAttribute('aria-busy') === 'false');
   const state = await page.evaluate(async () => {
