@@ -5,6 +5,8 @@
   const W = 1184;
   const H = 532;
   const SPEED = 168;
+  const WALK_FRAME_DISTANCE = 19;
+  const DRAGON_IGNITION_DELAY = 5050;
   const START = { x: 577, y: 516 };
   const TARGET = { x: 770, y: 456 };
   const ZONE = { x1: 738, x2: 798, y1: 420, y2: 468 };
@@ -17,6 +19,7 @@
   const toast = document.getElementById('toast');
   const live = document.getElementById('live');
   const dragonEvent = document.getElementById('dragonEvent');
+  const libraryRoofFire = document.getElementById('libraryRoofFire');
   const pad = [...document.querySelectorAll('[data-move]')];
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -32,8 +35,9 @@
     last: performance.now(),
     timer: 0,
     dragonTimer: 0,
+    dragonIgnitionTimer: 0,
     walkFrame: 0,
-    nextWalkFrame: 0,
+    walkDistance: 0,
   };
 
   let sprites = {};
@@ -72,13 +76,13 @@
       : direction === 'down'
         ? sprites.characterFront
         : sprites.characterSide;
-    setWalkFrame(0);
   }
 
   function setWalkFrame(frameIndex) {
     if (state.walkFrame === frameIndex && sprite.style.translate) return;
     state.walkFrame = frameIndex;
-    sprite.style.translate = `${frameIndex * -25}% 0`;
+    sprite.style.translate = `${frameIndex * -20}% 0`;
+    player.dataset.walkFrame = String(frameIndex);
   }
 
   function renderCamera() {
@@ -128,9 +132,12 @@
   }
 
   function move(dx, dy) {
+    const previousX = state.x;
+    const previousY = state.y;
     if (walkable(state.x + dx, state.y)) state.x += dx;
     if (walkable(state.x, state.y + dy)) state.y += dy;
     if (collision(state.x, state.y)) go();
+    return Math.hypot(state.x - previousX, state.y - previousY);
   }
 
   const direction = (dx, dy) => Math.abs(dx) > Math.abs(dy)
@@ -166,14 +173,13 @@
         if (state.autoEnter) go();
         state.autoEnter = false;
       }
-      return true;
+      return 0;
     }
     const step = Math.min(distance, SPEED * delta);
     const vx = dx / distance * step;
     const vy = dy / distance * step;
     face(direction(vx, vy));
-    move(vx, vy);
-    return true;
+    return move(vx, vy);
   }
 
   function toOffice() {
@@ -209,27 +215,25 @@
       if (state.keys.has('d') || state.keys.has('arrowright') || state.keys.has('right')) dx += 1;
       if (state.keys.has('w') || state.keys.has('arrowup') || state.keys.has('up')) dy -= 1;
       if (state.keys.has('s') || state.keys.has('arrowdown') || state.keys.has('down')) dy += 1;
-      let moving = false;
+      let moved = 0;
       if (dx || dy) {
         clearRoute();
         const length = Math.hypot(dx, dy);
         dx = dx / length * SPEED * delta;
         dy = dy / length * SPEED * delta;
         face(direction(dx, dy));
-        move(dx, dy);
-        moving = true;
+        moved = move(dx, dy);
       } else if (state.route.length) {
-        moving = routeStep(delta);
+        moved = routeStep(delta);
       }
+      const moving = moved > .05;
       player.classList.toggle('walking', moving);
       if (moving) {
-        if (now >= state.nextWalkFrame) {
-          setWalkFrame((state.walkFrame + 1) % 4);
-          state.nextWalkFrame = now + 115;
-        }
+        state.walkDistance += moved;
+        setWalkFrame(1 + Math.floor(state.walkDistance / WALK_FRAME_DISTANCE) % 4);
       } else {
         setWalkFrame(0);
-        state.nextWalkFrame = now;
+        state.walkDistance = 0;
       }
       render();
     }
@@ -249,7 +253,16 @@
       scheduleDragon();
       return;
     }
+    clearTimeout(state.dragonIgnitionTimer);
     dragonEvent.classList.add('is-active');
+    state.dragonIgnitionTimer = setTimeout(igniteLibraryRoof, DRAGON_IGNITION_DELAY);
+  }
+
+  function igniteLibraryRoof() {
+    if (reduceMotion.matches || document.hidden || state.entering) return;
+    libraryRoofFire.classList.remove('is-burning');
+    void libraryRoofFire.offsetWidth;
+    libraryRoofFire.classList.add('is-burning');
   }
 
   dragonEvent.addEventListener('animationend', (event) => {
@@ -258,16 +271,25 @@
     scheduleDragon();
   });
 
+  libraryRoofFire.addEventListener('animationend', (event) => {
+    if (event.target !== libraryRoofFire || event.animationName !== 'roofFireLife') return;
+    libraryRoofFire.classList.remove('is-burning');
+  });
+
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       clearTimeout(state.dragonTimer);
+      clearTimeout(state.dragonIgnitionTimer);
       dragonEvent.classList.remove('is-active');
+      libraryRoofFire.classList.remove('is-burning');
     } else {
       scheduleDragon(true);
     }
   });
   reduceMotion.addEventListener?.('change', () => {
+    clearTimeout(state.dragonIgnitionTimer);
     dragonEvent.classList.remove('is-active');
+    libraryRoofFire.classList.remove('is-burning');
     scheduleDragon(true);
   });
 
@@ -340,5 +362,5 @@
     note('마을을 불러오지 못했어요. 페이지를 새로고침해 주세요.', 6000);
   });
 
-  window.ASKI_EFFECTS = Object.freeze({ triggerDragon });
+  window.ASKI_EFFECTS = Object.freeze({ triggerDragon, igniteLibraryRoof });
 })();
