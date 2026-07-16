@@ -181,7 +181,7 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   z-index: 2;
   inset: 0;
   display: block;
-  background: url("./assets/dragon-flight.webp?v=10") 0 0 / 300% 100% no-repeat;
+  background: url("./assets/dragon-flight.webp?v=11") 0 0 / 300% 100% no-repeat;
   transform-origin: 58% 56%;
 }
 .dragon-event.is-active .dragon-sprite {
@@ -219,7 +219,7 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   position: absolute;
   z-index: 2;
   inset: 0;
-  background: url("./assets/dragon-breath.webp?v=10") 0 0 / 600% 100% no-repeat;
+  background: url("./assets/dragon-breath.webp?v=11") 0 0 / 600% 100% no-repeat;
   filter: saturate(1.08) contrast(1.06) drop-shadow(0 0 3px #ffe46d) drop-shadow(0 0 9px #ff4a16cc);
   will-change: background-position;
 }
@@ -317,7 +317,7 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   z-index: 5;
   aspect-ratio: 181 / 140;
   opacity: 0;
-  background: url("./assets/house-flame.webp?v=10") 0 0 / 600% 100% no-repeat;
+  background: url("./assets/house-flame.webp?v=11") 0 0 / 600% 100% no-repeat;
   filter: saturate(1.12) contrast(1.05) drop-shadow(0 0 3px #ffe26a) drop-shadow(0 0 9px #f44a16d9);
   transform-origin: 50% 100%;
   will-change: background-position, transform, opacity;
@@ -331,7 +331,7 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   width: 54%;
   z-index: 6;
   aspect-ratio: 2 / 3;
-  background-image: url("./assets/roof-fire.webp?v=10");
+  background-image: url("./assets/roof-fire.webp?v=11");
 }
 .roof-flame-left { --delay: .58s; --speed: .83s; --tilt: -12deg; left: 0; top: 27%; width: 43%; }
 .roof-flame-right { --delay: .92s; --speed: .67s; --tilt: 8deg; left: 29%; top: 12%; width: 67%; }
@@ -408,8 +408,8 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
   z-index: 8;
   border-radius: 30% 30% 12% 12%;
   opacity: 0;
-  background: radial-gradient(circle at 50% 62%, #fffbd3 0 12%, #ffd34d 28%, #ff6f1f 58%, #a6200c 76%, transparent 78%);
-  box-shadow: 0 0 5px #ffd24e, 0 0 13px #ff4d1fa8;
+  background: radial-gradient(circle at 50% 68%, #fff0a1 0 5%, #ffbd38 23%, #ff5a1d 54%, #7a1409 74%, transparent 79%);
+  box-shadow: 0 0 4px #ffb931, 0 0 10px #ff431c8f;
   mix-blend-mode: screen;
   transform-origin: 50% 100%;
 }
@@ -428,10 +428,21 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
 .window-upper { --delay: 2.25s; left: 68.5%; top: 45%; width: 6.4%; height: 11%; }
 .window-lower-left { --delay: 2.8s; left: 16%; top: 76%; width: 5.6%; height: 10%; }
 .window-lower-right { --delay: 3.15s; left: 72.5%; top: 75.5%; width: 5.8%; height: 10.5%; }
-.door-heat { --delay: 3.4s; left: 41.5%; top: 73%; width: 11%; height: 22%; border-radius: 45% 45% 8% 8%; }
-.library-fire-scene.is-burning .window-blaze,
-.library-fire-scene.is-burning .door-heat {
+.door-heat {
+  --delay: 3.4s;
+  left: 43%;
+  top: 74%;
+  width: 8.5%;
+  height: 20%;
+  border-radius: 45% 45% 8% 8%;
+  background: radial-gradient(ellipse at 50% 76%, #ffc54d 0 8%, #ff641f 34%, #8a1a0a 65%, transparent 78%);
+  box-shadow: inset 0 0 5px #ffdc6d, 0 0 9px #ff4b1c80;
+}
+.library-fire-scene.is-burning .window-blaze {
   animation: windowIgnite 17s ease-out var(--delay) both, windowFlicker .36s ease-in-out calc(var(--delay) + .5s) infinite alternate;
+}
+.library-fire-scene.is-burning .door-heat {
+  animation: doorIgnite 16.4s ease-out var(--delay) both, windowFlicker .44s ease-in-out calc(var(--delay) + .5s) infinite alternate;
 }
 .roof-impact {
   position: absolute;
@@ -544,11 +555,17 @@ img { display: block; width: 100%; user-select: none; -webkit-user-drag: none; }
 }
 @keyframes windowIgnite {
   0% { opacity: 0; transform: scale(.2); }
-  8%, 72% { opacity: .95; transform: scale(1); }
-  88% { opacity: .66; }
+  8%, 72% { opacity: .78; transform: scale(1); }
+  88% { opacity: .48; }
   100% { opacity: 0; transform: scale(.58); }
 }
-@keyframes windowFlicker { to { filter: brightness(1.35) saturate(1.2); box-shadow: 0 0 8px #fff1a5, 0 0 18px #ff3d17d1; } }
+@keyframes doorIgnite {
+  0% { opacity: 0; transform: scale(.3, .15); }
+  10%, 70% { opacity: .56; transform: scale(1); }
+  88% { opacity: .34; }
+  100% { opacity: 0; transform: scale(.7, .45); }
+}
+@keyframes windowFlicker { to { filter: brightness(1.22) saturate(1.16); box-shadow: 0 0 6px #ffd66b, 0 0 13px #ff3d17a8; } }
 @keyframes roofImpactPulse {
   0% { opacity: .25; transform: scale(.38) rotate(0); }
   42% { opacity: 1; transform: scale(1.18) rotate(7deg); }
