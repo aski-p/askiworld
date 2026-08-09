@@ -27,7 +27,7 @@ test('production build emits only the fullscreen static application', async () =
     'favicon.svg',
     'index.html',
     'styles.css',
-    'tiktokuxVOfhqgU3CT0xjPS0yjERmRQmgU1APT.txt',
+    'tiktokfFBrMuCbFo9RCkErMeKBhAykMpaM8Za6.txt',
   ];
 
   async function files(directory, prefix = '') {
@@ -41,8 +41,8 @@ test('production build emits only the fullscreen static application', async () =
   }
 
   expect((await files('dist')).sort()).toEqual(expected);
-  await expect(fs.readFile('dist/tiktokuxVOfhqgU3CT0xjPS0yjERmRQmgU1APT.txt', 'utf8')).resolves.toBe(
-    'tiktok-developers-site-verification=uxVOfhqgU3CT0xjPS0yjERmRQmgU1APT',
+  await expect(fs.readFile('dist/tiktokfFBrMuCbFo9RCkErMeKBhAykMpaM8Za6.txt', 'utf8')).resolves.toBe(
+    'tiktok-developers-site-verification=fFBrMuCbFo9RCkErMeKBhAykMpaM8Za6',
   );
   const html = await fs.readFile('dist/index.html', 'utf8');
   expect(html).not.toMatch(/컨셉 아트|sidebar|mobile-info|class="bottom"/);

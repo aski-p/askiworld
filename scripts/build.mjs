@@ -10,7 +10,7 @@ const PUBLIC_FILES = [
   'app.js',
   'atlas.js',
   'favicon.svg',
-  'tiktokuxVOfhqgU3CT0xjPS0yjERmRQmgU1APT.txt',
+  'tiktokfFBrMuCbFo9RCkErMeKBhAykMpaM8Za6.txt',
   'assets/dragon-breath.webp',
   'assets/dragon-flight.webp',
   'assets/house-flame.webp',
