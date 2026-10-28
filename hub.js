@@ -3,6 +3,7 @@ const categories = {
   'aski-studio': ['Aski Studio', '아스키 스튜디오 작업 공간'],
   'h3-studio': ['H3 Studio', '영상 작업을 위한 공간'],
   'musemoa': ['MuseMoa', '뮤즈모아 작업 공간'],
+  'fingerforest': ['FingerForest', '핑거포레스트 앱과 설치 안내'],
   'agent-office': ['Agent Office', '에이전트 업무를 확인하는 공간'],
 };
 const search = document.querySelector('#search');
@@ -25,7 +26,7 @@ function render() {
     const actions = document.createElement('div'); actions.className = 'row-actions';
     for (const entry of entries) {
       const a = document.createElement('a'); a.href = entry.url; a.dataset.destination = entry.id; a.className = 'destination';
-      const label = document.createElement('span'); label.textContent = entry.environment === 'office' ? 'Office 열기' : entry.environment.toUpperCase(); a.append(label);
+      const label = document.createElement('span'); label.textContent = entry.environment === 'office' ? 'Office 열기' : entry.environment === 'app' ? '앱 열기' : entry.environment === 'download' ? '앱 다운로드' : entry.environment.toUpperCase(); a.append(label);
       if (entry.access === 'vpn') { const badge = document.createElement('small'); badge.textContent = 'VPN 필요'; a.append(badge); }
       const arrow = document.createElement('span'); arrow.className = 'arrow'; arrow.setAttribute('aria-hidden','true'); arrow.textContent = '↗'; a.append(arrow); actions.append(a);
     }

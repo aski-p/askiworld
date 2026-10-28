@@ -6,6 +6,8 @@ export const HUB_LINKS = Object.freeze([
   { id:'h3-prd', label:'H3 Studio H3 스튜디오', category:'h3-studio', environment:'prd', url:'https://h3-video-web.vercel.app/', access:'public' },
   { id:'muse-dev', label:'MuseMoa 뮤즈모아', category:'musemoa', environment:'dev', url:host+'8446/', access:'vpn' },
   { id:'muse-prd', label:'MuseMoa 뮤즈모아', category:'musemoa', environment:'prd', url:'https://musemoa-prd.vercel.app/', access:'public' },
+  { id:'fingerforest-app', label:'FingerForest 핑거포레스트 앱열기', category:'fingerforest', environment:'app', url:'https://web-production-011c4.up.railway.app/', access:'public' },
+  { id:'fingerforest-download', label:'FingerForest 핑거포레스트 앱다운로드', category:'fingerforest', environment:'download', url:'https://web-production-011c4.up.railway.app/install.html', access:'public' },
   { id:'office', label:'Agent Office 에이전트 오피스', category:'agent-office', environment:'office', url:'https://subagent-aski.vercel.app/', access:'public' },
 ]);
 export function filterHubLinks(query, category) {

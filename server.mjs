@@ -21,6 +21,16 @@ const MIME_TYPES = new Map([
 const PUBLIC_PATHS = new Set([
   '/index.html',
   '/village.html',
+  '/village.css',
+  '/village.js',
+  '/village-scene.js',
+  '/village-dialogue.js',
+  '/assets/apps/aski-studio.png',
+  '/assets/apps/h3-studio.svg',
+  '/assets/apps/musemoa.svg',
+  '/assets/apps/agent-office.svg',
+  '/assets/apps/fingerforest.png',
+
   '/hub.css',
   '/hub.js',
   '/hub-links.js',

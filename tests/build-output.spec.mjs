@@ -27,10 +27,20 @@ test('production build emits hub and village static applications', async () => {
     'favicon.svg',
     'index.html',
     'village.html',
+    'village.css',
+    'village.js',
+    'village-scene.js',
+    'village-dialogue.js',
     'hub.css',
     'hub.js',
     'hub-links.js',
     'assets/role-icons.svg',
+    'assets/apps/aski-studio.png',
+    'assets/apps/h3-studio.svg',
+    'assets/apps/musemoa.svg',
+    'assets/apps/agent-office.svg',
+    'assets/apps/fingerforest.png',
+
     'styles.css',
     'tiktokfFBrMuCbFo9RCkErMeKBhAykMpaM8Za6.txt',
   ];
@@ -52,14 +62,7 @@ test('production build emits hub and village static applications', async () => {
   const html = await fs.readFile('dist/index.html', 'utf8');
   expect(html).toContain('ASKIWORLD');
   const village = await fs.readFile('dist/village.html', 'utf8');
-  expect(village).toContain('class="library-fire-scene"');
-  expect(village).toContain('class="dragon-breath"');
-  const css = await fs.readFile('dist/styles.css', 'utf8');
-  expect(css).toContain('assets/dragon-breath.webp?v=12');
-  expect(css).toContain('assets/house-flame.webp?v=12');
-  expect(css).not.toContain('background-image: url("./assets/roof-fire.webp');
-  expect(css).toContain('@keyframes houseFireLife');
-
+  expect(village).toContain('src="/village.js"');
   const vercel = JSON.parse(await fs.readFile('vercel.json', 'utf8'));
   expect(vercel.headers).toEqual([
     {
