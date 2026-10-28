@@ -20,6 +20,11 @@ const MIME_TYPES = new Map([
 
 const PUBLIC_PATHS = new Set([
   '/index.html',
+  '/village.html',
+  '/hub.css',
+  '/hub.js',
+  '/hub-links.js',
+  '/assets/role-icons.svg',
   '/styles.css',
   '/app.js',
   '/atlas.js',

@@ -5,7 +5,7 @@ import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
 
-test('production build emits only the fullscreen static application', async () => {
+test('production build emits hub and village static applications', async () => {
   await execFileAsync('npm', ['run', 'build'], { cwd: process.cwd() });
 
   const expected = [
@@ -26,6 +26,11 @@ test('production build emits only the fullscreen static application', async () =
     'atlas.js',
     'favicon.svg',
     'index.html',
+    'village.html',
+    'hub.css',
+    'hub.js',
+    'hub-links.js',
+    'assets/role-icons.svg',
     'styles.css',
     'tiktokfFBrMuCbFo9RCkErMeKBhAykMpaM8Za6.txt',
   ];
@@ -40,14 +45,15 @@ test('production build emits only the fullscreen static application', async () =
     return result;
   }
 
-  expect((await files('dist')).sort()).toEqual(expected);
+  expect((await files('dist')).sort()).toEqual(expected.sort());
   await expect(fs.readFile('dist/tiktokfFBrMuCbFo9RCkErMeKBhAykMpaM8Za6.txt', 'utf8')).resolves.toBe(
     'tiktok-developers-site-verification=fFBrMuCbFo9RCkErMeKBhAykMpaM8Za6',
   );
   const html = await fs.readFile('dist/index.html', 'utf8');
-  expect(html).not.toMatch(/컨셉 아트|sidebar|mobile-info|class="bottom"/);
-  expect(html).toContain('class="library-fire-scene"');
-  expect(html).toContain('class="dragon-breath"');
+  expect(html).toContain('ASKIWORLD');
+  const village = await fs.readFile('dist/village.html', 'utf8');
+  expect(village).toContain('class="library-fire-scene"');
+  expect(village).toContain('class="dragon-breath"');
   const css = await fs.readFile('dist/styles.css', 'utf8');
   expect(css).toContain('assets/dragon-breath.webp?v=12');
   expect(css).toContain('assets/house-flame.webp?v=12');

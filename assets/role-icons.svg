@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<symbol id="role-atlas" viewBox="0 0 48 48"><rect x="7" y="14" width="34" height="29" rx="10"/><path d="M24 14V4l9 4-9 4M17 27h.1M31 27h.1M21 34h6"/></symbol>
+<symbol id="role-forge" viewBox="0 0 48 48"><rect x="7" y="9" width="34" height="34" rx="10"/><path d="M10 19h28l-3 8H13zM21 34h6"/></symbol>
+<symbol id="role-frame" viewBox="0 0 48 48"><rect x="7" y="14" width="34" height="29" rx="10"/><path d="M24 14V3l8 8-5 1M17 27h.1M31 27h.1M21 34h6"/></symbol>
+<symbol id="role-palette" viewBox="0 0 48 48"><rect x="7" y="14" width="34" height="29" rx="10"/><path d="M8 17Q12 5 28 7l9 8M17 27h.1M31 27h.1M21 34h6"/></symbol>
+<symbol id="role-scout" viewBox="0 0 48 48"><rect x="7" y="9" width="34" height="34" rx="10"/><circle cx="30" cy="25" r="6"/><path d="M17 26h.1M21 34h6"/></symbol>
+<symbol id="role-sentinel" viewBox="0 0 48 48"><path d="M24 5 40 11v15c0 9-7 15-16 19C15 41 8 35 8 26V11zM17 24h.1M31 24h.1M21 32h6"/></symbol>
+</svg>

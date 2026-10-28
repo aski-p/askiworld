@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server.mjs",
     "build": "node scripts/build.mjs",
-    "check": "node --check atlas.js && node --check app.js && node --check server.mjs && node --check scripts/build.mjs",
+    "check": "node --check hub.js && node --check hub-links.js && node --check atlas.js && node --check app.js && node --check server.mjs && node --check scripts/build.mjs",
     "test:e2e": "playwright test",
     "test": "npm run check && npm run test:e2e"
   },

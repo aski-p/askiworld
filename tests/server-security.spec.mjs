@@ -46,7 +46,7 @@ test('readiness resolves only after every movement sprite decodes', async ({ pag
     if (/\.(png|webp)$/.test(name || '')) requestedAssets.add(name);
   });
 
-  await page.goto('/');
+  await page.goto('/village.html');
   const sources = await page.evaluate(() => window.ASKI_READY);
 
   expect(Object.keys(sources).sort()).toEqual([
@@ -88,7 +88,7 @@ test('active UHD village failure keeps large-screen gameplay disabled', async ({
     intercepted = true;
     return route.abort('failed');
   });
-  await page.goto('/');
+  await page.goto('/village.html');
   await page.waitForFunction(() => document.querySelector('#app')?.getAttribute('aria-busy') === 'false');
   const state = await page.evaluate(async () => {
     let resolved = true;
@@ -117,7 +117,7 @@ test('each required image failure keeps the game disabled and shows recovery UI'
       viewport: { width: 600, height: 800 },
     });
     await page.route(new RegExp(`/${asset.replaceAll('.', '\\.')}(?:\\?[^#]*)?$`), (route) => route.abort('failed'));
-    await page.goto('/');
+    await page.goto('/village.html');
     await page.waitForFunction(() => document.querySelector('#app')?.getAttribute('aria-busy') === 'false');
 
     const state = await page.evaluate(async () => {
@@ -140,7 +140,7 @@ test('each required image failure keeps the game disabled and shows recovery UI'
 
 test('selected village failure keeps the game disabled and shows recovery UI', async ({ page }) => {
   await page.route(/\/village(?:-night)?(?:-hd|-uhd)?\.(?:png|webp)(?:\?[^#]*)?$/, (route) => route.abort('failed'));
-  await page.goto('/');
+  await page.goto('/village.html');
   await page.waitForFunction(() => document.querySelector('#app')?.getAttribute('aria-busy') === 'false');
   const state = await page.evaluate(async () => {
     let resolved = true;

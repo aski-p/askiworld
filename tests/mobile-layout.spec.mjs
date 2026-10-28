@@ -3,7 +3,7 @@ import { test, expect, devices } from '@playwright/test';
 const { defaultBrowserType: _defaultBrowserType, ...iphone13 } = devices['iPhone 13'];
 
 const ready = async (page) => {
-  await page.goto('/');
+  await page.goto('/village.html');
   await page.evaluate(() => window.ASKI_READY);
   await page.waitForFunction(() => document.querySelector('#app')?.getAttribute('aria-busy') === 'false');
 };

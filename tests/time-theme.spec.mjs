@@ -11,7 +11,7 @@ for (const [time, expectedPeriod] of cases) {
   test(`Seoul ${time} resolves to ${expectedPeriod}`, async ({ page }) => {
     await page.clock.install({ time: new Date(time) });
     await page.setViewportSize({ width: 1184, height: 532 });
-    await page.goto('/');
+    await page.goto('/village.html');
     await page.evaluate(() => window.ASKI_READY);
     const selected = await page.locator('[data-asset="village"]').evaluate((element) => ({
       path: new URL(element.currentSrc).pathname,

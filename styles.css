@@ -952,3 +952,5 @@ kbd {
     transition-delay: 0ms !important;
   }
 }
+
+.hub-return { position: fixed; top: 12px; left: 12px; z-index: 1000; background: #f8f4e9; color: #174d49; padding: 10px 14px; border-radius: 8px; font: 600 14px sans-serif; }

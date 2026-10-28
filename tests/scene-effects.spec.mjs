@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 const ready = async (page) => {
-  await page.goto('/');
+  await page.goto('/village.html');
   await page.evaluate(() => window.ASKI_READY);
   await page.waitForFunction(() => document.querySelector('#app')?.getAttribute('aria-busy') === 'false');
 };

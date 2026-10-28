@@ -1,96 +1,27 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#77bada">
-  <meta name="description" content="캐릭터를 움직여 Agent Office 문으로 들어가는 전체 화면 ASKIWORLD">
-  <meta property="og:title" content="ASKIWORLD — 마을을 탐험하세요">
-  <meta property="og:description" content="캐릭터를 움직여 Agent Office 건물의 문을 열고 들어가세요.">
-  <title>ASKIWORLD — 마을을 탐험하세요</title>
-  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=12">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ASKIWORLD — 작업 공간</title><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/hub.css">
+  <script type="module" src="/hub.js"></script>
 </head>
 <body>
-<noscript><div class="noscript">JavaScript를 켜 주세요. <a href="https://subagent-aski.vercel.app/">Agent Office 바로가기</a></div></noscript>
-<main class="board is-loading" id="app" aria-busy="true">
-  <section class="world" id="world" tabindex="0" aria-label="직접 움직일 수 있는 ASKIWORLD 마을">
-    <div class="scene" id="scene">
-      <img class="village" data-asset="village" decoding="async" fetchpriority="high" alt="산과 숲으로 둘러싸인 셀 셰이딩 판타지 마을과 Agent Office">
-      <div class="sunwash" aria-hidden="true"></div>
-      <div class="breeze" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      <div class="sky-life" aria-hidden="true">
-        <div class="flock flock-one"><i></i><i></i><i></i><i></i><i></i></div>
-        <div class="flock flock-two"><i></i><i></i><i></i><i></i></div>
-        <div class="dragon-event" id="dragonEvent">
-          <span class="dragon-sprite"></span>
-          <span class="dragon-mouth-glow"></span>
-          <span class="dragon-breath">
-            <span class="dragon-breath-glow"></span>
-            <span class="dragon-breath-sprite"></span>
-            <i></i><i></i><i></i><i></i>
-          </span>
-        </div>
-      </div>
-      <div class="library-fire-scene" id="libraryRoofFire" aria-hidden="true">
-        <span class="house-smoke"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-        <span class="roof-flame roof-flame-left"></span>
-        <span class="roof-flame roof-flame-main"></span>
-        <span class="roof-flame roof-flame-right"></span>
-        <span class="roof-flame roof-flame-eave"></span>
-        <span class="window-blaze window-attic"></span>
-        <span class="window-blaze window-upper"></span>
-        <span class="roof-impact"><b></b><i></i><i></i><i></i><i></i><i></i><i></i></span>
-        <span class="house-embers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-      </div>
-      <div class="fountain-water" aria-hidden="true">
-        <svg viewBox="0 0 200 145" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="water-glint-gradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#e9fdff"></stop>
-              <stop offset=".48" stop-color="#9ee9fb"></stop>
-              <stop offset="1" stop-color="#d9faff"></stop>
-            </linearGradient>
-          </defs>
-          <g class="water-glints">
-            <path class="water-glint water-glint-left" d="M65.568 51.6 C58.8 63 52.5 83 49.945 100.054"></path>
-            <path class="water-glint water-glint-front" d="M92.907 76.837 C89.5 88 84.7 105 82.167 116.206"></path>
-            <path class="water-glint water-glint-right" d="M132.94 51.6 C142.2 64 149.6 84 153.445 100.054"></path>
-          </g>
-          <g class="water-droplets">
-            <circle class="water-droplet" cx="48.5" cy="98.5" r=".8"></circle>
-            <circle class="water-droplet" cx="52" cy="100.5" r=".6"></circle>
-            <circle class="water-droplet" cx="80.5" cy="114" r=".7"></circle>
-            <circle class="water-droplet" cx="84.5" cy="116" r=".65"></circle>
-            <circle class="water-droplet" cx="151.5" cy="98.5" r=".75"></circle>
-            <circle class="water-droplet" cx="155.5" cy="101" r=".6"></circle>
-          </g>
-          <g class="water-splashes">
-            <ellipse class="water-splash water-splash-left" cx="49.945" cy="101.2" rx="7" ry="2.3"></ellipse>
-            <ellipse class="water-splash water-splash-front" cx="82.167" cy="117.2" rx="8" ry="2.5"></ellipse>
-            <ellipse class="water-splash water-splash-right" cx="153.445" cy="101.2" rx="7" ry="2.3"></ellipse>
-          </g>
-        </svg>
-      </div>
-      <div class="door" aria-hidden="true"><i></i><b class="left"></b><b class="right"></b></div>
-      <div class="player facing-up" id="player" aria-label="ASKIWORLD 여행자"><span></span><div class="sprite-window"><img id="sprite" data-asset="characterBack" alt=""></div></div>
-      <button class="hotspot office" id="office" data-name="Agent Office" aria-label="Agent Office. 누르면 캐릭터가 문으로 이동합니다"><em>Agent Office로 이동</em></button>
-      <button class="hotspot studio locked" data-name="Studio" aria-label="Studio, 준비 중"></button>
-      <button class="hotspot library locked" data-name="Library" aria-label="Library, 준비 중"></button>
-      <button class="hotspot windmill locked" data-name="Windmill" aria-label="Windmill, 준비 중"></button>
-    </div>
-    <div class="help"><span class="desktop-controls"><kbd>WASD</kbd><kbd>방향키</kbd><span>이동 · 길/건물 클릭</span></span><span class="mobile-controls">화면을 누르거나 방향키로 이동</span></div>
-    <button class="enter" id="enter"><kbd>E</kbd> 문 열고 들어가기</button>
-    <div class="pad" aria-label="모바일 이동 조작">
-      <button data-move="up" aria-label="위로 이동">▲</button><button data-move="left" aria-label="왼쪽으로 이동">◀</button><button data-move="down" aria-label="아래로 이동">▼</button><button data-move="right" aria-label="오른쪽으로 이동">▶</button>
-    </div>
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <div class="transition" aria-hidden="true"><div class="rings"></div><strong>Agent Office</strong><span>페이지로 이동하는 중…</span></div>
-  </section>
-  <div class="loading" id="loading"><div><strong>ASKIWORLD</strong><span>마을을 불러오는 중…</span></div></div>
-</main>
-<div class="sr" id="live" aria-live="polite"></div>
-<script src="./atlas.js?v=12" defer></script>
-<script src="./app.js?v=12" defer></script>
-</body>
-</html>
+  <header class="mobile-bar"><a class="brand" href="/">ASKI<span>WORLD</span></a><button id="menu-toggle" aria-expanded="false" aria-controls="sidebar" aria-label="메뉴 열기">☰ <span>메뉴</span></button></header>
+  <div class="layout">
+    <aside id="sidebar" class="sidebar" aria-label="카테고리">
+      <a class="brand desktop-brand" href="/">ASKI<span>WORLD</span><small>작업 공간 디렉터리</small></a>
+      <p class="nav-title">작업 공간</p>
+      <nav aria-label="카테고리"><button data-category="all" aria-current="page">전체</button><button data-category="aski-studio">Aski Studio</button><button data-category="h3-studio">H3 Studio</button><button data-category="musemoa">MuseMoa</button><button data-category="agent-office">Agent Office</button></nav>
+      <div class="sidebar-foot"><span>ASKI의 공간을 한곳에</span><a href="/village.html">마을 보기 <span aria-hidden="true">↗</span></a></div>
+    </aside>
+    <main id="main" tabindex="-1">
+      <div class="main-top"><div><p class="context">ASKI의 작업 공간</p><h1 id="page-title">모든 공간</h1><p class="intro" id="page-intro">필요한 작업 공간을 찾아 바로 이동하세요.</p></div><div class="search-wrap"><label for="search">공간 검색</label><input id="search" type="search" placeholder="이름 또는 환경 검색" autocomplete="off"></div></div>
+      <div class="directory-heading"><h2>바로가기</h2><span id="result-count"></span></div>
+      <div id="directory" aria-live="polite"></div>
+      <section class="roles" aria-labelledby="roles-title"><div class="roles-heading"><div><p class="context">함께 일하는 역할</p><h2 id="roles-title">Agent Office</h2><p>역할별 업무는 오피스에서 확인하세요.</p></div><a href="https://subagent-aski.vercel.app/">오피스 열기 <span aria-hidden="true">↗</span></a></div><div class="role-list">
+        <div><svg aria-hidden="true"><use href="/assets/role-icons.svg#role-atlas"></use></svg><span>Atlas</span><small>조율</small></div><div><svg aria-hidden="true"><use href="/assets/role-icons.svg#role-forge"></use></svg><span>Forge</span><small>구현</small></div><div><svg aria-hidden="true"><use href="/assets/role-icons.svg#role-frame"></use></svg><span>Frame</span><small>화면 구조</small></div><div><svg aria-hidden="true"><use href="/assets/role-icons.svg#role-palette"></use></svg><span>Palette</span><small>시각 디자인</small></div><div><svg aria-hidden="true"><use href="/assets/role-icons.svg#role-scout"></use></svg><span>Scout</span><small>조사</small></div><div><svg aria-hidden="true"><use href="/assets/role-icons.svg#role-sentinel"></use></svg><span>Sentinel</span><small>검증</small></div>
+      </div></section>
+      <footer>ASKIWORLD <span>작업 공간을 위한 안내</span></footer>
+    </main>
+  </div>
+</body></html>
