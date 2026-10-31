@@ -1,17 +1,17 @@
 import { test, expect } from '@playwright/test';
 
-test('hub exposes nine exact destinations and VPN labels', async ({ page }) => {
+test('hub exposes ten exact destinations and VPN labels', async ({ page }) => {
   await page.goto('/');
   const links = page.locator('[data-destination]');
-  await expect(links).toHaveCount(9);
+  await expect(links).toHaveCount(10);
   expect(await links.evaluateAll(xs => xs.map(x => x.href))).toEqual([
     'https://thinkstationpgx-11d3.tailccac79.ts.net:8443/', 'https://reelradar-5.vercel.app/',
     'https://thinkstationpgx-11d3.tailccac79.ts.net:8447/', 'https://h3-video-web.vercel.app/',
     'https://thinkstationpgx-11d3.tailccac79.ts.net:8446/', 'https://musemoa-prd.vercel.app/',
     'https://web-production-011c4.up.railway.app/', 'https://web-production-011c4.up.railway.app/install.html',
-    'https://subagent-aski.vercel.app/'
+    'https://second-brain-aski.vercel.app/', 'https://subagent-aski.vercel.app/'
   ]);
-  await expect(page.getByText('VPN 필요')).toHaveCount(3);
+  await expect(page.getByText('VPN 필요')).toHaveCount(4);
   await expect(page.locator('script[src*="app.js"]')).toHaveCount(0);
 });
 
@@ -20,7 +20,7 @@ test('search filters Korean and English and handles whitespace and no results', 
   const search = page.getByRole('searchbox');
   await search.fill('뮤즈'); await expect(page.locator('[data-destination]')).toHaveCount(2);
   await search.fill('H3'); await expect(page.locator('[data-destination]')).toHaveCount(2);
-  await search.fill('   '); await expect(page.locator('[data-destination]')).toHaveCount(9);
+  await search.fill('   '); await expect(page.locator('[data-destination]')).toHaveCount(10);
   await search.fill('없는 검색어'); await expect(page.getByText('검색 결과가 없습니다')).toBeVisible();
 });
 
@@ -43,4 +43,16 @@ test('mobile menu restores focus and category selection, without overflow', asyn
 test('village remains accessible with a return link', async ({ page }) => {
   await page.goto('/village.html'); await expect(page.locator('.world')).toBeVisible();
   await page.getByRole('link', { name: '허브로 돌아가기' }).click(); await expect(page).toHaveURL(/\/$/);
+});
+
+
+test('Second Brain is searchable and its category exposes the deployed NAS workspace with VPN notice', async ({page})=>{
+ await page.goto('/');
+ await page.getByRole('searchbox').fill('세컨드 브레인');
+ await expect(page.locator('[data-destination]')).toHaveCount(1);
+ await expect(page.locator('[data-destination="second-brain"]')).toHaveAttribute('href','https://second-brain-aski.vercel.app/');
+ await expect(page.getByText('VPN 필요')).toBeVisible();
+ await page.getByRole('searchbox').fill('');
+ await page.getByRole('button',{name:'Second Brain',exact:true}).click();
+ await expect(page.locator('[data-destination]')).toHaveCount(1);
 });

@@ -4,6 +4,7 @@ const categories = {
   'h3-studio': ['H3 Studio', '영상 작업을 위한 공간'],
   'musemoa': ['MuseMoa', '뮤즈모아 작업 공간'],
   'fingerforest': ['FingerForest', '핑거포레스트 앱과 설치 안내'],
+  'second-brain': ['Second Brain', 'NAS 노트·지식 그래프·문서 편집 · ASKI Studio 접속 키 사용'],
   'agent-office': ['Agent Office', '에이전트 업무를 확인하는 공간'],
 };
 const search = document.querySelector('#search');

@@ -19,6 +19,7 @@ const PUBLIC_FILES = [
   'assets/apps/h3-studio.svg',
   'assets/apps/musemoa.svg',
   'assets/apps/agent-office.svg',
+  'assets/apps/second-brain.svg',
   'assets/apps/fingerforest.png',
 
   'styles.css',

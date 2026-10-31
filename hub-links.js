@@ -9,6 +9,7 @@ export const HUB_LINKS = Object.freeze([
   { id:'fingerforest-app', label:'FingerForest 핑거포레스트 앱열기', category:'fingerforest', environment:'app', url:'https://web-production-011c4.up.railway.app/', access:'public' },
   { id:'fingerforest-download', label:'FingerForest 핑거포레스트 앱다운로드', category:'fingerforest', environment:'download', url:'https://web-production-011c4.up.railway.app/install.html', access:'public' },
   { id:'office', label:'Agent Office 에이전트 오피스', category:'agent-office', environment:'office', url:'https://subagent-aski.vercel.app/', access:'public' },
+  { id:'second-brain', label:'Second Brain 세컨드 브레인 NAS 지식 노트 그래프', category:'second-brain', environment:'prd', url:'https://second-brain-aski.vercel.app/', access:'vpn' },
 ]);
 export function filterHubLinks(query, category) {
   const needle = query.trim().toLocaleLowerCase();

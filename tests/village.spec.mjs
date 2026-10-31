@@ -41,11 +41,11 @@ test('movement is guarded during dialogue and viewport remains usable', async ({
   expect(await player.getAttribute('transform')).toBe(during);
   await expect(page.getByRole('button', {name:'목적지 보기'})).toBeVisible();
 });
-test('FingerForest links and five sidebar icons are available', async ({page}) => {
+test('FingerForest links and six sidebar icons are available', async ({page}) => {
  await page.goto('/');
  await expect(page.locator('[data-destination="fingerforest-app"]')).toHaveAttribute('href','https://web-production-011c4.up.railway.app/');
  await expect(page.locator('[data-destination="fingerforest-download"]')).toHaveAttribute('href','https://web-production-011c4.up.railway.app/install.html');
- await expect(page.locator('nav img[aria-hidden="true"]')).toHaveCount(5);
+ await expect(page.locator('nav img[aria-hidden="true"]')).toHaveCount(6);
 });
 
 test('each guide presents independently verified destinations and Forge topics', async ({page}) => {

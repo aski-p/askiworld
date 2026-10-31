@@ -48,3 +48,7 @@ Playwright 검증 범위:
 - 표준·HD·UHD 배경 source가 viewport에 맞게 선택되는지
 - 선택된 고해상도 배경 로드 실패 시 게임이 비활성화되는지
 - console/page 오류가 없는지
+
+## Second Brain (2026-10-31)
+
+허브 카테고리·검색·바로가기에 https://second-brain-aski.vercel.app/ 를 추가했다. NAS API는 Tailscale 연결이 필요하며 기존 ASKI Studio 접속 코드로 인증한다. 포털에 접속 키나 개인 노트는 저장하지 않는다. 기존9개 목적지는 그대로 유지한다.
